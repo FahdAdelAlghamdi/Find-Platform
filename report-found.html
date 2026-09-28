@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإبلاغ عن غرض موجود — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/report-form.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<section class="report-page context-found">
+  <div class="container">
+
+    <div class="report-header">
+      <span class="tag tag-found" data-i18n="report.found.tag">موجود</span>
+      <h1 class="heading" data-i18n="report.found.title">الإبلاغ عن غرض موجود</h1>
+      <p class="subheading" data-i18n="report.found.subtitle">
+        بياناتك لن تظهر لأحد إلا إذا وُجد بلاغ مفقودات مطابق فعلياً.
+      </p>
+    </div>
+
+    <div class="privacy-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+      <span data-i18n="report.privacyNote">
+        بلاغك لا يظهر لأي مستخدم عشوائي — فقط لأصحاب البلاغات القريبة من وصفك.
+      </span>
+    </div>
+
+    <div id="loginGuard" class="form-error" style="display:none" role="alert"></div>
+
+    <form id="reportForm" class="report-form" novalidate>
+
+      <!-- ---------- Section 1: Photo ---------- -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step-dot">1</span>
+          <span data-i18n="report.section.photo">صورة الغرض (اختياري لكنها تحسّن دقة المطابقة كثيراً)</span>
+        </div>
+
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="imageInput" accept="image/*" hidden>
+
+          <div class="dropzone-empty" id="dropzoneEmpty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <circle cx="8.5" cy="10" r="1.5"/>
+              <path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L4 19"/>
+            </svg>
+            <div class="dz-title" data-i18n="report.dropzone.title">اسحب صورة هنا أو اضغط للاختيار</div>
+            <div class="dz-hint" data-i18n="report.dropzone.hint">PNG أو JPG — أوضح الصورة، أدق المطابقة</div>
+          </div>
+
+          <div id="imagePreviewWrap" hidden>
+            <img id="imagePreview" alt="">
+          </div>
+          <button type="button" class="dz-remove" id="removeImage" hidden aria-label="حذف الصورة">✕</button>
+        </div>
+      </div>
+
+      <!-- ---------- Section 2: Item details ---------- -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step-dot">2</span>
+          <span data-i18n="report.section.details">تفاصيل الغرض</span>
+        </div>
+
+        <div class="field">
+          <label for="title" data-i18n="field.title">عنوان مختصر للغرض</label>
+          <input class="input" type="text" id="title" maxlength="120" required
+                 data-i18n-placeholder="field.title.placeholder" placeholder="مثال: محفظة جلدية بنية">
+        </div>
+
+        <div class="field">
+          <label data-i18n="field.category">الفئة</label>
+          <div class="chip-grid" id="categoryGrid" role="radiogroup">
+
+            <input class="chip-input" type="radio" name="category" id="cat-1" value="1" required>
+            <label class="chip-label" for="cat-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M2 19h20"/></svg>
+              <span data-i18n="cat.1">إلكترونيات</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-2" value="2">
+            <label class="chip-label" for="cat-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+              <span data-i18n="cat.2">جوالات</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-3" value="3">
+            <label class="chip-label" for="cat-3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18M9 6V4h6v2"/></svg>
+              <span data-i18n="cat.3">محافظ وبطاقات</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-4" value="4">
+            <label class="chip-label" for="cat-4">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M16 16l2.5-2.5M19 19l2-2"/></svg>
+              <span data-i18n="cat.4">مفاتيح</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-5" value="5">
+            <label class="chip-label" for="cat-5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 8V6a4 4 0 0 1 8 0v2"/><rect x="4" y="8" width="16" height="12" rx="2"/></svg>
+              <span data-i18n="cat.5">حقائب</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-6" value="6">
+            <label class="chip-label" for="cat-6">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6.5" cy="13" r="3"/><circle cx="17.5" cy="13" r="3"/><path d="M9.5 12h5M3 12l1-3M21 12l-1-3"/></svg>
+              <span data-i18n="cat.6">نظارات</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-7" value="7">
+            <label class="chip-label" for="cat-7">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="6"/><path d="M12 9.5V12l1.5 1.5M9 3h6M9 21h6"/></svg>
+              <span data-i18n="cat.7">ساعات ومجوهرات</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-8" value="8">
+            <label class="chip-label" for="cat-8">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13z"/></svg>
+              <span data-i18n="cat.8">كتب ومستلزمات</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-9" value="9">
+            <label class="chip-label" for="cat-9">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4L4 7l2 3 2-1.5V20h8V8.5L18 10l2-3-4-3-2 2h-4l-2-2z"/></svg>
+              <span data-i18n="cat.9">ملابس</span>
+            </label>
+
+            <input class="chip-input" type="radio" name="category" id="cat-10" value="10">
+            <label class="chip-label" for="cat-10">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+              <span data-i18n="cat.10">أخرى</span>
+            </label>
+
+          </div>
+        </div>
+
+        <div class="field" style="margin-block-end:0">
+          <label for="description" data-i18n="field.description">الوصف التفصيلي</label>
+          <textarea class="input" id="description" rows="4" maxlength="1000" required
+                    data-i18n-placeholder="field.description.placeholder"
+                    placeholder="اذكر أي تفاصيل تميّز الغرض: اللون، العلامة التجارية، خدوش أو علامات مميزة..."></textarea>
+          <div class="char-count"><span id="descCount">0</span>/1000</div>
+        </div>
+      </div>
+
+      <!-- ---------- Section 3: Where & when ---------- -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step-dot">3</span>
+          <span data-i18n="report.section.whenWhere">مكان وزمان الفقدان</span>
+        </div>
+
+        <div class="field">
+          <label for="location" data-i18n="field.location">الموقع</label>
+          <select class="input" id="location" required>
+            <option value="" disabled selected data-i18n="field.location.placeholder">اختر الموقع</option>
+            <option value="1"  data-i18n="loc.1">كلية علوم الحاسب وتقنية المعلومات</option>
+            <option value="2"  data-i18n="loc.2">المكتبة المركزية</option>
+            <option value="3"  data-i18n="loc.3">المسجد</option>
+            <option value="4"  data-i18n="loc.4">الكافتيريا</option>
+            <option value="5"  data-i18n="loc.5">المواقف</option>
+            <option value="6"  data-i18n="loc.6">قاعات المحاضرات</option>
+            <option value="7"  data-i18n="loc.7">المعامل</option>
+            <option value="8"  data-i18n="loc.8">المسرح / القاعة الكبرى</option>
+            <option value="9"  data-i18n="loc.9">صالة الرياضة</option>
+            <option value="10" data-i18n="loc.10">عمادة شؤون الطلاب</option>
+            <option value="11" data-i18n="loc.11">البوابة الرئيسية</option>
+            <option value="12" data-i18n="loc.12">مبنى الإدارة</option>
+            <option value="13" data-i18n="loc.13">أخرى</option>
+          </select>
+        </div>
+
+        <div class="input-group" style="margin-block-end:0">
+          <div class="field">
+            <label for="eventDate" data-i18n="field.dateFound">تاريخ العثور</label>
+            <input class="input" type="date" id="eventDate" required>
+          </div>
+          <div class="field">
+            <label for="eventTime" data-i18n="field.time">الوقت التقريبي (اختياري)</label>
+            <input class="input" type="time" id="eventTime">
+          </div>
+        </div>
+      </div>
+
+      <div id="formError" class="form-error" role="alert"></div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="submitBtn" data-i18n="report.found.submit">
+        نشر بلاغ الموجودات
+      </button>
+    </form>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/reports.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  /* ---------- معاينة الصورة (سحب/إفلات + اختيار) ---------- */
+  const dropzone      = document.getElementById("dropzone");
+  const imageInput    = document.getElementById("imageInput");
+  const dropzoneEmpty = document.getElementById("dropzoneEmpty");
+  const previewWrap   = document.getElementById("imagePreviewWrap");
+  const previewImg    = document.getElementById("imagePreview");
+  const removeBtn     = document.getElementById("removeImage");
+
+  function showPreview(file) {
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewWrap.hidden = false;
+    dropzoneEmpty.hidden = true;
+    removeBtn.hidden = false;
+  }
+
+  dropzone.addEventListener("click", () => imageInput.click());
+
+  imageInput.addEventListener("change", () => {
+    if (imageInput.files[0]) showPreview(imageInput.files[0]);
+  });
+
+  ["dragenter", "dragover"].forEach(evt =>
+    dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add("is-dragover"); })
+  );
+  ["dragleave", "drop"].forEach(evt =>
+    dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove("is-dragover"); })
+  );
+  dropzone.addEventListener("drop", (e) => {
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      imageInput.files = e.dataTransfer.files;
+      showPreview(file);
+    }
+  });
+
+  removeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    imageInput.value = "";
+    previewWrap.hidden = true;
+    dropzoneEmpty.hidden = false;
+    removeBtn.hidden = true;
+  });
+
+  /* ---------- عدّاد حروف الوصف ---------- */
+  const description = document.getElementById("description");
+  const descCount = document.getElementById("descCount");
+  description.addEventListener("input", () => {
+    descCount.textContent = description.value.length;
+  });
+
+  /* ---------- منع اختيار تاريخ مستقبلي ---------- */
+  document.getElementById("eventDate").max = new Date().toISOString().split("T")[0];
+
+  /* ---------- التحقق من تسجيل الدخول ---------- */
+  document.addEventListener("DOMContentLoaded", async () => {
+    const profile = await getCurrentProfile();
+    const guard = document.getElementById("loginGuard");
+    const form = document.getElementById("reportForm");
+    const lang = localStorage.getItem("find_lang") || "ar";
+
+    if (!profile) {
+      guard.innerHTML = (lang === "ar")
+        ? 'يجب <a href="login.html" style="text-decoration:underline">تسجيل الدخول</a> أولاً عشان تقدر تبلّغ عن غرض.'
+        : 'You must <a href="login.html" style="text-decoration:underline">log in</a> first to file a report.';
+      guard.style.display = "block";
+      form.querySelectorAll("input, select, textarea, button").forEach(el => el.disabled = true);
+    }
+  });
+
+  /* ---------- الإرسال الفعلي ---------- */
+  document.getElementById("reportForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const errorBox = document.getElementById("formError");
+    const submitBtn = document.getElementById("submitBtn");
+    errorBox.classList.remove("visible");
+
+    const category = document.querySelector('input[name="category"]:checked');
+    if (!category) {
+      errorBox.textContent = "الرجاء اختيار فئة الغرض";
+      errorBox.classList.add("visible");
+      return;
+    }
+
+    const location = document.getElementById("location").value;
+    if (!location) {
+      errorBox.textContent = "الرجاء اختيار الموقع";
+      errorBox.classList.add("visible");
+      return;
+    }
+
+    submitBtn.setAttribute("disabled", "true");
+    submitBtn.textContent = "جارِ الإرسال...";
+
+    const { data, error } = await submitReport({
+      type: "found",
+      title: document.getElementById("title").value.trim(),
+      categoryId: category.value,
+      description: description.value.trim(),
+      locationId: location,
+      eventDate: document.getElementById("eventDate").value,
+      eventTime: document.getElementById("eventTime").value,
+      imageFile: imageInput.files[0] || null,
+    });
+
+    if (error) {
+      submitBtn.removeAttribute("disabled");
+      submitBtn.textContent = "نشر بلاغ الموجودات";
+
+      const messages = {
+        NOT_LOGGED_IN:       "يجب تسجيل الدخول أولاً",
+        IMAGE_TOO_LARGE:     "حجم الصورة أكبر من 5 ميجابايت",
+        IMAGE_UPLOAD_FAILED: "تعذّر رفع الصورة، حاول مرة أخرى",
+      };
+      errorBox.textContent = messages[error.message] || "حدث خطأ، حاول مرة أخرى";
+      errorBox.classList.add("visible");
+      return;
+    }
+
+    sessionStorage.setItem("find_last_report_ref", data.reference_no);
+    window.location.href = "report-success.html";
+  });
+</script>
+</body>
+</html>

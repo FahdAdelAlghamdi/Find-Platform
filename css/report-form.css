@@ -1,0 +1,193 @@
+/* ============================================================
+   Report form — shared between report-lost.html / report-found.html
+   ============================================================ */
+
+.report-page { padding-block: var(--sp-7); }
+
+.report-header {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+  margin-block-end: var(--sp-6);
+}
+
+.report-header .tag { margin-block-end: var(--sp-3); }
+.report-header .subheading { max-width: 52ch; margin-inline: auto; margin-block-start: var(--sp-2); }
+
+.report-form {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.form-section {
+  background: var(--paper-0);
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  margin-block-end: var(--sp-4);
+}
+
+.form-section .section-title {
+  font-weight: 600;
+  font-size: 1.02rem;
+  color: var(--ink-900);
+  margin-block-end: var(--sp-4);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.form-section .section-title .step-dot {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--ink-900);
+  color: var(--paper-0);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+
+.char-count {
+  text-align: end;
+  font-size: 0.78rem;
+  color: var(--text-400);
+  margin-block-start: -0.35rem;
+}
+
+/* ---------- Image dropzone ---------- */
+.dropzone {
+  position: relative;
+  border: 2px dashed var(--line-300);
+  border-radius: var(--radius-md);
+  min-height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+  overflow: hidden;
+  background: var(--paper-50);
+}
+
+.dropzone:hover, .dropzone.is-dragover {
+  border-color: var(--gold-500);
+  background: var(--gold-100);
+}
+
+.dropzone-empty {
+  padding: var(--sp-5);
+  color: var(--text-600);
+}
+
+.dropzone-empty svg {
+  width: 34px; height: 34px;
+  margin-inline: auto;
+  margin-block-end: var(--sp-2);
+  color: var(--text-400);
+}
+
+.dropzone-empty .dz-title { font-weight: 600; color: var(--ink-900); font-size: 0.95rem; }
+.dropzone-empty .dz-hint  { font-size: 0.82rem; margin-block-start: 2px; }
+
+#imagePreviewWrap {
+  position: absolute;
+  inset: 0;
+}
+
+#imagePreviewWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dz-remove {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  background: rgba(18, 35, 63, 0.75);
+  color: var(--paper-0);
+  border: none;
+  border-radius: 999px;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  z-index: 2;
+}
+
+/* ---------- Category chips ---------- */
+.chip-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-2);
+}
+
+@media (max-width: 560px) {
+  .chip-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.chip-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px; height: 1px;
+  pointer-events: none;
+}
+
+.chip-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--sp-2) 4px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: 0.76rem;
+  color: var(--text-600);
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.chip-label svg { width: 22px; height: 22px; }
+
+.chip-input:checked + .chip-label {
+  border-color: var(--report-accent, var(--gold-500));
+  background: var(--report-accent-tint, var(--gold-100));
+  color: var(--report-accent-text, var(--gold-600));
+  font-weight: 600;
+}
+
+.chip-input:focus-visible + .chip-label {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 2px;
+}
+
+/* Lost / Found accent context */
+.report-page.context-lost   { --report-accent: var(--lost-500);  --report-accent-tint: var(--lost-100);  --report-accent-text: var(--lost-600); }
+.report-page.context-found  { --report-accent: var(--found-500); --report-accent-tint: var(--found-100); --report-accent-text: var(--found-600); }
+
+.report-page.context-lost .btn-primary  { background: var(--lost-500); }
+.report-page.context-lost .btn-primary:hover { background: var(--lost-600); }
+.report-page.context-found .btn-primary { background: var(--found-500); }
+.report-page.context-found .btn-primary:hover { background: var(--found-600); }
+
+/* ملاحظة الخصوصية: بنفس عرض الفورم وبخلفية زجاجية فاتحة فوق التدرّج */
+.privacy-note {
+  max-width: 640px;
+  margin-inline: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: 0.85rem;
+  color: var(--text-600);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3);
+  margin-block-end: var(--sp-4);
+}
+
+.privacy-note svg { width: 18px; height: 18px; flex: none; margin-top: 1px; color: var(--gold-600); }

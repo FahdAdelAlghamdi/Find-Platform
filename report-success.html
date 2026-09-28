@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تم إرسال البلاغ — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/report-choice.css">
+<style>
+  .success-page { padding-block: var(--sp-8); min-height: 55vh; display:flex; align-items:center; }
+  .success-card { max-width: 480px; margin-inline:auto; text-align:center; }
+  .success-icon {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: var(--found-100); color: var(--found-600);
+    display:flex; align-items:center; justify-content:center;
+    margin-inline:auto; margin-block-end: var(--sp-5);
+  }
+  .success-icon svg { width: 40px; height: 40px; }
+  .ref-box {
+    background: var(--paper-0); border: 1px dashed var(--line-300);
+    border-radius: var(--radius-md); padding: var(--sp-4);
+    margin-block: var(--sp-5);
+  }
+  .ref-box .ref-label { font-size: 0.85rem; color: var(--text-600); margin-block-end: 4px; }
+  .ref-box .ref-value { font-family: var(--font-mono); font-size: 1.4rem; color: var(--ink-900); direction: ltr; }
+  .success-actions { display:flex; gap: var(--sp-3); justify-content:center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<section class="success-page">
+  <div class="container">
+    <div class="success-card">
+
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+
+      <h1 class="heading" data-i18n="success.title">تم إرسال بلاغك بنجاح</h1>
+      <p class="subheading" data-i18n="success.subtitle">
+        بمجرد ما نلقى بلاغ يطابقه، بتوصلك رسالة إشعار فوراً.
+      </p>
+
+      <div class="ref-box">
+        <div class="ref-label" data-i18n="success.refLabel">رقم البلاغ المرجعي</div>
+        <div class="ref-value" id="refValue">—</div>
+      </div>
+
+      <div class="success-actions">
+        <a href="my-reports.html" class="btn btn-primary" data-i18n="success.viewReports">عرض بلاغاتي</a>
+        <a href="index.html" class="btn btn-ghost" data-i18n="success.backHome">العودة للرئيسية</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  const ref = sessionStorage.getItem("find_last_report_ref");
+  document.getElementById("refValue").textContent = ref || "—";
+  if (!ref) {
+    // ما فيه بلاغ حديث — على الأغلب المستخدم دخل الصفحة مباشرة
+    window.location.href = "index.html";
+  }
+</script>
+</body>
+</html>

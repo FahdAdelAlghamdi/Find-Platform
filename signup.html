@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إنشاء حساب — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<section class="auth-page">
+  <div class="container">
+    <div class="auth-card">
+      <h1 class="heading" data-i18n="auth.signup.title">إنشاء حساب جديد</h1>
+      <p class="subheading" data-i18n="auth.signup.subtitle">
+        خاص بطلاب ومنسوبي جامعة الإمام عبدالرحمن بن فيصل
+      </p>
+
+      <div id="formError" class="form-error" role="alert"></div>
+      <div id="formSuccess" class="form-success" role="status"></div>
+
+      <form id="signupForm" novalidate>
+
+        <div class="field">
+          <label for="fullName" data-i18n="field.fullName">الاسم الكامل</label>
+          <input class="input" type="text" id="fullName" required autocomplete="name">
+        </div>
+
+        <div class="input-group">
+          <div class="field">
+            <label for="universityId" data-i18n="field.universityId">الرقم الجامعي</label>
+            <input class="input" type="text" id="universityId" inputmode="numeric" pattern="[0-9]{6,12}" required>
+          </div>
+
+          <div class="field">
+            <label for="userType" data-i18n="field.userType">نوع المستخدم</label>
+            <select class="input" id="userType" required>
+              <option value="student" data-i18n="field.userType.student">طالب</option>
+              <option value="faculty" data-i18n="field.userType.faculty">دكتور</option>
+              <option value="staff" data-i18n="field.userType.staff">إداري</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="phone" data-i18n="field.phone">رقم الجوال</label>
+          <input class="input" type="tel" id="phone" placeholder="05xxxxxxxx" required>
+        </div>
+
+        <div class="input-group">
+          <div class="field">
+            <label for="password" data-i18n="field.password">كلمة المرور</label>
+            <input class="input" type="password" id="password" minlength="8" required autocomplete="new-password">
+          </div>
+
+          <div class="field">
+            <label for="confirmPassword" data-i18n="field.confirmPassword">تأكيد كلمة المرور</label>
+            <input class="input" type="password" id="confirmPassword" minlength="8" required autocomplete="new-password">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn" data-i18n="auth.signup.submit">
+          إنشاء الحساب
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        <span data-i18n="auth.haveAccount">لديك حساب؟</span>
+        <a href="login.html" data-i18n="auth.goLogin">سجّل الدخول</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  const form = document.getElementById("signupForm");
+  const errorBox = document.getElementById("formError");
+  const successBox = document.getElementById("formSuccess");
+  const submitBtn = document.getElementById("submitBtn");
+
+  function showError(key, fallback) {
+    const lang = localStorage.getItem("find_lang") || "ar";
+    errorBox.textContent = DICTIONARY[lang][key] || fallback;
+    errorBox.classList.add("visible");
+    successBox.classList.remove("visible");
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.classList.remove("visible");
+    successBox.classList.remove("visible");
+
+    const fullName = document.getElementById("fullName").value.trim();
+    const universityId = document.getElementById("universityId").value.trim();
+    const userType = document.getElementById("userType").value;
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (!/^[0-9]{6,12}$/.test(universityId)) {
+      return showError("error.universityIdFormat", "الرقم الجامعي يجب أن يكون أرقاماً فقط (6-12 رقم)");
+    }
+    if (!/^(05|9665|\+9665)[0-9]{8}$/.test(phone)) {
+      return showError("error.phoneFormat", "رقم الجوال غير صحيح، تأكد من صيغته (05xxxxxxxx)");
+    }
+    if (password !== confirmPassword) {
+      return showError("error.passwordMismatch", "كلمتا المرور غير متطابقتين");
+    }
+
+    submitBtn.setAttribute("disabled", "true");
+
+    const { data, error } = await signUpUser({ fullName, universityId, userType, phone, password });
+
+    submitBtn.removeAttribute("disabled");
+
+    if (error) {
+      console.error(error);
+      return showError("error.genericSignup", "تعذر إنشاء الحساب، حاول مرة أخرى");
+    }
+
+    const lang = localStorage.getItem("find_lang") || "ar";
+    successBox.textContent = DICTIONARY[lang]["success.signup"];
+    successBox.classList.add("visible");
+
+    setTimeout(() => { window.location.href = "index.html"; }, 1200);
+  });
+</script>
+</body>
+</html>

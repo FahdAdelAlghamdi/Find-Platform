@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم الإدارة — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<section class="admin-page">
+  <div class="container">
+
+    <div class="admin-head">
+      <h1 class="heading" data-i18n="admin.title">لوحة تحكم الإدارة</h1>
+      <select class="input year-select" id="yearSelect"></select>
+    </div>
+
+    <div id="loginGuard" class="form-error" style="display:none"></div>
+    <div id="dashboardWrap" hidden>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon ink">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="statTotal">—</div>
+            <div class="stat-label" data-i18n="admin.stat.total">إجمالي البلاغات</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon lost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c-5 0-9 4-9 9 0 6.5 9 12 9 12s9-5.5 9-12c0-5-4-9-9-9z"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="statLost">—</div>
+            <div class="stat-label" data-i18n="admin.stat.lost">بلاغات مفقودات</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon found">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="statFound">—</div>
+            <div class="stat-label" data-i18n="admin.stat.found">بلاغات موجودات</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon found">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="statResolved">—</div>
+            <div class="stat-label" data-i18n="admin.stat.resolved">تم استرجاعها</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="statUnresolved">—</div>
+            <div class="stat-label" data-i18n="admin.stat.unresolved">قيد الانتظار</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l6-6 4 4 8-8"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="statRate">—</div>
+            <div class="stat-label" data-i18n="admin.stat.rate">نسبة الاسترجاع</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-grid">
+        <div class="panel">
+          <div class="panel-title" data-i18n="admin.byCategory">حسب الفئة</div>
+          <div id="categoryBars"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title" data-i18n="admin.byLocation">حسب الموقع</div>
+          <div id="locationBars"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-i18n="admin.monthly">البلاغات الشهرية</div>
+        <div class="chart-legend">
+          <span><i class="legend-dot" style="background:var(--gold-500)"></i><span data-i18n="admin.legend.total">إجمالي</span></span>
+          <span><i class="legend-dot" style="background:var(--found-500)"></i><span data-i18n="admin.legend.resolved">تم استرجاعها</span></span>
+        </div>
+        <div id="monthlyChart" class="month-chart"></div>
+        <div id="monthlyNote" class="admin-note" hidden data-i18n="admin.selectYearNote">
+          اختر سنة محددة (مو "كل السنوات") لعرض الرسم الشهري.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  function lang() { return localStorage.getItem("find_lang") || "ar"; }
+  function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+  }
+
+  const MONTHS = {
+    ar: ["ينا", "فبر", "مار", "أبر", "ماي", "يون", "يول", "أغس", "سبت", "أكت", "نوف", "ديس"],
+    en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  };
+
+  async function initGuard() {
+    const guard = document.getElementById("loginGuard");
+    const wrap = document.getElementById("dashboardWrap");
+    const profile = await getCurrentProfile();
+
+    if (!profile) {
+      guard.style.display = "block";
+      guard.innerHTML = (lang() === "ar")
+        ? 'يجب <a href="login.html" style="text-decoration:underline">تسجيل الدخول</a> أولاً.'
+        : 'You must <a href="login.html" style="text-decoration:underline">log in</a> first.';
+      return false;
+    }
+
+    if (profile.role !== "admin") {
+      guard.style.display = "block";
+      guard.textContent = lang() === "ar"
+        ? "هذه الصفحة مخصصة لفريق الإدارة فقط."
+        : "This page is for administrators only.";
+      return false;
+    }
+
+    wrap.hidden = false;
+    return true;
+  }
+
+  async function loadYears() {
+    const { data, error } = await supabaseClient.rpc("get_available_years");
+    const select = document.getElementById("yearSelect");
+    const L = lang();
+
+    const allLabel = L === "ar" ? "كل السنوات" : "All years";
+    let options = `<option value="">${allLabel}</option>`;
+
+    if (!error && data) {
+      data.forEach(row => { options += `<option value="${row.year}">${row.year}</option>`; });
+    }
+    select.innerHTML = options;
+
+    if (data && data.length > 0) select.value = data[0].year;
+    select.addEventListener("change", loadDashboard);
+  }
+
+  function renderBars(containerId, rows, L) {
+    const el = document.getElementById(containerId);
+    if (!rows || rows.length === 0) {
+      el.innerHTML = `<p class="admin-note" style="padding:0">—</p>`;
+      return;
+    }
+    const max = Math.max(...rows.map(r => Number(r.total)), 1);
+
+    el.innerHTML = rows.map(r => {
+      const name = L === "ar" ? (r.category_ar || r.location_ar) : (r.category_en || r.location_en);
+      const total = Number(r.total);
+      const resolved = Number(r.resolved || 0);
+      const pct = (total / max) * 100;
+      const resolvedPct = total > 0 ? (resolved / total) * 100 : 0;
+
+      return `
+        <div class="bar-row">
+          <div class="bar-row-head">
+            <span class="name">${escapeHtml(name)}</span>
+            <span class="count">${total}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${pct}%">
+              <div class="bar-fill resolved-part" style="width:${resolvedPct}%"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderMonthly(rows, L) {
+    const chartEl = document.getElementById("monthlyChart");
+    const noteEl = document.getElementById("monthlyNote");
+
+    const yearSelected = document.getElementById("yearSelect").value;
+    if (!yearSelected) {
+      chartEl.innerHTML = "";
+      noteEl.hidden = false;
+      return;
+    }
+    noteEl.hidden = true;
+
+    const byMonth = {};
+    (rows || []).forEach(r => { byMonth[r.month] = r; });
+
+    const max = Math.max(...Array.from({ length: 12 }, (_, i) => Number(byMonth[i + 1]?.total || 0)), 1);
+
+    chartEl.innerHTML = Array.from({ length: 12 }, (_, i) => {
+      const m = i + 1;
+      const total = Number(byMonth[m]?.total || 0);
+      const resolved = Number(byMonth[m]?.resolved || 0);
+      const hTotal = Math.max((total / max) * 150, total > 0 ? 3 : 0);
+      const hResolved = Math.max((resolved / max) * 150, resolved > 0 ? 3 : 0);
+
+      return `
+        <div class="month-col">
+          <div class="month-bars">
+            <div class="month-bar" style="height:${hTotal}px" title="${total}"></div>
+            <div class="month-bar resolved" style="height:${hResolved}px" title="${resolved}"></div>
+          </div>
+          <div class="month-label">${MONTHS[L][i]}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function loadDashboard() {
+    const yearValue = document.getElementById("yearSelect").value;
+    const p_year = yearValue ? Number(yearValue) : null;
+    const L = lang();
+
+    const { data: stats, error: statsErr } = await supabaseClient.rpc("get_admin_stats", { p_year });
+    if (!statsErr && stats?.ok) {
+      document.getElementById("statTotal").textContent = stats.total_reports;
+      document.getElementById("statLost").textContent = stats.lost_reports;
+      document.getElementById("statFound").textContent = stats.found_reports;
+      document.getElementById("statResolved").textContent = stats.resolved;
+      document.getElementById("statUnresolved").textContent = stats.unresolved;
+      document.getElementById("statRate").textContent = stats.resolution_rate + "%";
+    }
+
+    const { data: byCat } = await supabaseClient.rpc("get_stats_by_category", { p_year });
+    renderBars("categoryBars", byCat, L);
+
+    const { data: byLoc } = await supabaseClient.rpc("get_stats_by_location", { p_year });
+    renderBars("locationBars", byLoc, L);
+
+    if (p_year) {
+      const { data: monthly } = await supabaseClient.rpc("get_stats_monthly", { p_year });
+      renderMonthly(monthly, L);
+    } else {
+      renderMonthly(null, L);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const ok = await initGuard();
+    if (!ok) return;
+    await loadYears();
+    await loadDashboard();
+  });
+</script>
+</body>
+</html>

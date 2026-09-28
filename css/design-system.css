@@ -1,0 +1,698 @@
+/* ============================================================
+   FIND — Design System
+   Imam Abdulrahman Bin Faisal University
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+/* ---------- 1. Design Tokens ---------- */
+:root {
+  /* Color */
+  --ink-950: #0A1830;
+  --ink-900: #12233F;   /* كحلي عميق — أساسي */
+  --ink-700: #24405F;
+  --ink-500: #3E5A7C;
+
+  --gold-600: #9C7431;
+  --gold-500: #B8863B;  /* ذهبي نحاسي — تمييز */
+  --gold-300: #D9B77A;
+  --gold-100: #F3E7D0;
+  --hairline-gold: rgba(184, 134, 59, 0.35);
+
+  --found-600: #4A6A4C;
+  --found-500: #5C7A5E; /* أخضر — حالة موجود */
+  --found-100: #E4ECE4;
+
+  --lost-600: #7E3B30;
+  --lost-500: #9B4A3D;  /* طوبي — حالة مفقود */
+  --lost-100: #F0DFDA;
+
+  --alert-500: #E5484D; /* أحمر التنبيهات (النقطة والعدّاد) */
+
+  --paper-0: #FFFFFF;
+  --paper-50: #F5F6F7;
+  --paper-100: #EBEDEF;
+
+  --line-200: #DDE1E5;
+  --line-300: #C7CDD3;
+
+  --text-900: #16202B;
+  --text-600: #51606D;
+  --text-400: #8695A3;
+
+  /* ظل البطاقات البيضاء فوق الخلفية المتدرجة */
+  --shadow-card: 0 18px 36px -24px rgba(10, 24, 48, 0.45);
+
+  /* Type */
+  --font-ar: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+  --font-en: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  /* Scale */
+  --step-0: 1rem;
+  --step-1: 1.125rem;
+  --step-2: 1.375rem;
+  --step-3: 1.75rem;
+  --step-4: 2.25rem;
+  --step-5: 3rem;
+
+  /* Space */
+  --sp-1: 0.5rem;
+  --sp-2: 0.75rem;
+  --sp-3: 1rem;
+  --sp-4: 1.5rem;
+  --sp-5: 2rem;
+  --sp-6: 3rem;
+  --sp-7: 4.5rem;
+  --sp-8: 6rem;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---------- 2. Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; min-height: 100%; }
+
+/* نفس خلفية الرئيسية وعن المنصة، مطبّقة على كل الصفحات.
+   min-height + flex: الصفحة تاخذ طول الشاشة كامل حتى لو محتواها
+   قصير، والفوتر ينزل دايماً لتحت (بدون فراغ تحته).
+   no-repeat + لون كحلي: التدرّج ما يتكرر تحت الصفحة أبداً. */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ink-950);
+  background-image: radial-gradient(
+    160% 130% at 22% -15%,
+    #F6FBFF 0%,
+    #D7EAF8 18%,
+    #9FC3E0 34%,
+    var(--ink-500) 50%,
+    var(--ink-700) 66%,
+    var(--ink-900) 84%,
+    var(--ink-950) 100%
+  );
+  background-repeat: no-repeat;
+  color: var(--text-900);
+  font-family: var(--font-ar);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+html[lang="en"] body { font-family: var(--font-en); }
+
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 2px;
+}
+
+/* ---------- 3. Layout ---------- */
+
+/* يضمن أن أي عنصر عليه hidden يختفي فعلياً، حتى لو عليه class مثل
+   .flex أو .user-menu يحدد display بنفسه (مهم لتبديل حالة الهيدر) */
+[hidden] { display: none !important; }
+
+/* الحاوية اللي ينحقن فيها الهيدر ما تشكّل صندوق خاص فيها —
+   عشان position: sticky يشتغل فعلاً ويثبت الهيدر فوق وأنت تنزل */
+#site-header-mount { display: contents; }
+
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: var(--sp-4);
+}
+
+.section {
+  padding-block: var(--sp-8);
+}
+
+@media (max-width: 780px) {
+  .section { padding-block: var(--sp-6); }
+}
+
+/* ---------- 4. Typography ---------- */
+.display {
+  font-size: clamp(var(--step-4), 4vw + 1rem, var(--step-5));
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink-900);
+}
+
+.heading {
+  font-size: var(--step-3);
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+.subheading {
+  font-size: var(--step-1);
+  color: var(--text-600);
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.eyebrow-text {
+  font-size: 0.9rem;
+  color: var(--gold-600);
+  font-weight: 600;
+}
+
+.mono-tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---------- 5. Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  padding: 0.85rem 1.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.98rem;
+  border: 1px solid transparent;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  white-space: nowrap;
+}
+
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: 0.6; pointer-events: none; }
+
+.btn-primary {
+  background: var(--ink-900);
+  color: var(--paper-0);
+}
+.btn-primary:hover { background: var(--ink-700); }
+
+.btn-gold {
+  background: var(--gold-500);
+  color: var(--paper-0);
+}
+.btn-gold:hover { background: var(--gold-600); }
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line-300);
+  color: var(--ink-900);
+}
+.btn-ghost:hover { border-color: var(--ink-900); }
+
+.btn-text {
+  background: transparent;
+  padding: 0.5rem 0.25rem;
+  color: var(--ink-700);
+  font-weight: 500;
+}
+.btn-text:hover { color: var(--ink-900); }
+
+.btn-block { width: 100%; }
+
+/* ---------- 6. Forms ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-block-end: var(--sp-4);
+}
+
+.field label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+.field .hint {
+  font-size: 0.82rem;
+  color: var(--text-400);
+}
+
+.input, select.input, textarea.input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line-300);
+  border-radius: var(--radius-sm);
+  background: var(--paper-0);
+  color: var(--text-900);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color var(--dur) var(--ease);
+}
+
+.input:focus, select.input:focus, textarea.input:focus {
+  border-color: var(--ink-700);
+  outline: none;
+}
+
+.input-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+
+@media (max-width: 600px) {
+  .input-group { grid-template-columns: 1fr; }
+}
+
+/* رسائل الخطأ/النجاح — مشتركة لكل الصفحات */
+.form-error, .form-success {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  margin-block-end: var(--sp-4);
+  display: none;
+}
+.form-error.visible, .form-success.visible { display: block; }
+
+.form-error { background: var(--lost-100); color: var(--lost-600); }
+.form-success { background: var(--found-100); color: var(--found-600); }
+
+/* ---------- 7. Status tags ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.tag-lost   { background: var(--lost-100);  color: var(--lost-600); }
+.tag-found  { background: var(--found-100); color: var(--found-600); }
+.tag-gold   { background: var(--gold-100);  color: var(--gold-600); }
+.tag-muted  { background: var(--paper-100); color: var(--text-600); }
+
+/* ---------- 8. Header / Nav ---------- */
+.site-header {
+  background: var(--ink-900);
+  color: var(--paper-0);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-block: var(--sp-3);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+}
+
+.brand .brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--gold-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-900);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+}
+
+.main-nav a {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.82);
+  transition: color var(--dur) var(--ease);
+}
+.main-nav a:hover { color: var(--paper-0); }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.lang-switch {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--paper-0);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.lang-switch:hover { border-color: var(--paper-0); }
+
+.header-actions .btn-ghost {
+  border-color: rgba(255,255,255,0.35);
+  color: var(--paper-0);
+}
+.header-actions .btn-ghost:hover { border-color: var(--paper-0); }
+
+@media (max-width: 900px) {
+  .main-nav { display: none; }
+}
+
+.user-menu { position: relative; }
+
+.user-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--paper-0);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.user-chip:hover { border-color: var(--paper-0); }
+.user-chip::after { content: "▾"; font-size: 0.7rem; opacity: 0.8; }
+
+/* النقطة الحمراء على زر اسم المستخدم: فيه إشعار أو رسالة ما انقرت */
+.chip-dot {
+  position: absolute;
+  top: -5px;
+  inset-inline-end: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--alert-500);
+  border: 2px solid var(--ink-900);
+  animation: dotPulse 2s ease-out infinite;
+}
+
+@keyframes dotPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(229, 72, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0); }
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-end: 0;
+  background: var(--paper-0);
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-md);
+  min-width: 190px;
+  box-shadow: 0 16px 32px -16px rgba(18, 35, 63, 0.35);
+  padding: var(--sp-1);
+  z-index: 60;
+}
+
+.user-dropdown a, .user-dropdown button {
+  display: block;
+  width: 100%;
+  text-align: start;
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-900);
+  font-size: 0.92rem;
+  background: none;
+  border: none;
+}
+.user-dropdown a:hover, .user-dropdown button:hover { background: var(--paper-50); }
+.user-dropdown button { color: var(--lost-600); font-weight: 600; }
+
+.user-dropdown .menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+/* عدّاد أحمر جنب "إشعارات" و"المحادثات" بالقائمة */
+.menu-badge {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--alert-500);
+  color: var(--paper-0);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+/* ---------- 9. Footer ---------- */
+.site-footer {
+  margin-block-start: auto; /* ينزل الفوتر لآخر الشاشة بالصفحات القصيرة */
+  background: var(--ink-900);
+  color: rgba(255,255,255,0.7);
+}
+
+.site-footer .footer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr;
+  gap: var(--sp-6);
+  padding-block: var(--sp-7) var(--sp-6);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .site-footer .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .site-footer .footer-grid { grid-template-columns: 1fr; text-align: center; }
+}
+
+.footer-logos { display: flex; align-items: center; gap: var(--sp-3); margin-block-end: var(--sp-3); }
+@media (max-width: 560px) { .footer-logos { justify-content: center; } }
+
+.footer-uni-logo { height: 38px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; }
+
+.footer-divider { width: 1px; height: 26px; background: rgba(255,255,255,0.2); }
+
+.footer-find-mark { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.1rem; color: var(--paper-0); }
+.footer-find-mark .find-mark-badge {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: var(--gold-500); color: var(--ink-900);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.82rem;
+}
+
+.footer-tagline { font-size: 0.86rem; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 32ch; }
+@media (max-width: 560px) { .footer-tagline { margin-inline: auto; } }
+
+.footer-col { display: flex; flex-direction: column; gap: 10px; }
+.footer-col h4 { font-size: 0.9rem; font-weight: 700; color: var(--gold-300); margin-block-end: 4px; }
+.footer-col a, .footer-col span { font-size: 0.86rem; color: rgba(255,255,255,0.7); }
+.footer-col a:hover { color: var(--paper-0); }
+
+.footer-contact-line { direction: ltr; unicode-bidi: isolate; display: block; font-family: var(--font-mono); }
+
+.footer-lead { color: var(--paper-0); font-weight: 600; }
+.footer-lead em { font-style: normal; font-size: 0.74rem; font-weight: 700; color: var(--gold-500); margin-inline-start: 4px; }
+
+.footer-bottom {
+  display: block;
+  text-align: center;
+  border-block-start: 1px solid rgba(255,255,255,0.12);
+  padding-block: var(--sp-4);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+}
+
+.site-footer a:hover { color: var(--paper-0); }
+
+/* ---------- 10. Utilities ---------- */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.gap-2 { gap: var(--sp-2); }
+.gap-3 { gap: var(--sp-3); }
+.gap-4 { gap: var(--sp-4); }
+.text-center { text-align: center; }
+.hairline {
+  border: none;
+  border-block-start: 1px solid var(--line-200);
+}
+
+/* ---------- 11. Animated wave-mesh canvas ----------
+   الـ canvas يُضاف تلقائياً من js/header.js لأي صفحة ما فيها واحد */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background: transparent;
+}
+
+/* ---------- 12. Inner-page titles ---------- */
+.notif-head > .heading,
+.matches-head > .heading,
+.reports-head > .heading,
+.admin-head > .heading,
+.report-header > .heading,
+.choice-head > .heading,
+.success-card > .heading,
+.chat-page > .container > .heading,
+.section > .container > h1.heading {
+  font-size: clamp(var(--step-3), 1.6vw + 1.1rem, var(--step-4));
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink-900);
+  text-align: center;
+}
+
+.notif-head > .heading::after,
+.matches-head > .heading::after,
+.reports-head > .heading::after,
+.admin-head > .heading::after,
+.report-header > .heading::after,
+.choice-head > .heading::after,
+.success-card > .heading::after,
+.chat-page > .container > .heading::after,
+.section > .container > h1.heading::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  border-radius: 999px;
+  margin: var(--sp-3) auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold-500), transparent);
+}
+
+/* ---------- 13. Surfaces on the gradient ---------- */
+.auth-card, .profile-card, .form-section, .choice-card,
+.report-item, .match-item, .notif-item,
+.stat-card, .panel {
+  box-shadow: var(--shadow-card);
+}
+
+#loadingState {
+  width: fit-content;
+  margin-inline: auto;
+  padding: 0.55rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--line-200);
+  font-size: 0.95rem;
+  color: var(--text-600);
+}
+
+#loginGuard {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ---------- 14. Toast notifications ----------
+   الإشعار المنبثق اللي يطلع أول ما تدخل الموقع (أو لحظة وصول
+   طلب تواصل جديد) — يُنشأ من js/header-auth.js */
+.find-toast-stack {
+  position: fixed;
+  top: 78px;
+  inset-inline-end: 20px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(370px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.find-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--paper-0);
+  border: 1px solid var(--line-200);
+  border-inline-start: 4px solid var(--gold-500);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 24px 48px -20px rgba(10, 24, 48, 0.55);
+  animation: toastIn 0.35s var(--ease) both;
+}
+.find-toast.is-leaving { animation: toastOut 0.25s ease forwards; }
+.find-toast.tone-error { border-inline-start-color: var(--alert-500); }
+
+.find-toast-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--gold-100);
+  color: var(--gold-600);
+}
+.find-toast.tone-error .find-toast-icon { background: var(--lost-100); color: var(--lost-600); }
+.find-toast-icon svg { width: 18px; height: 18px; }
+
+.find-toast-body { flex: 1; min-width: 0; }
+.find-toast-title { font-weight: 700; color: var(--ink-900); font-size: 0.92rem; line-height: 1.45; }
+.find-toast-text { font-size: 0.84rem; color: var(--text-600); margin-block-start: 2px; line-height: 1.55; }
+
+.find-toast-action {
+  display: inline-block;
+  margin-block-start: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--gold-600);
+}
+.find-toast-action:hover { text-decoration: underline; }
+
+.find-toast-close {
+  flex: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-400);
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.find-toast-close:hover { background: var(--paper-100); color: var(--ink-900); }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-10px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+@media (max-width: 560px) {
+  .find-toast-stack { top: 72px; inset-inline: 16px; width: auto; }
+}

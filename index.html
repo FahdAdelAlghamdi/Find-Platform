@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIND — منصة المفقودات والموجودات</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<!-- ============ Header (injected by js/header.js) ============ -->
+<div id="site-header-mount"></div>
+
+<!-- ============ Hero: الكلام + لوحة المطابقة المتحركة ============ -->
+<section class="hero">
+  <div class="container">
+
+    <div class="hero-crest-badge">
+      <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل">
+    </div>
+
+    <div class="hero-grid">
+
+      <!-- ---------- الكلام والأزرار ---------- -->
+      <div class="hero-content" data-mesh-shield>
+        <span class="eyebrow-text" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</span>
+        <h1 class="display" data-i18n="hero.title">غرضك المفقود أقرب مما تتصور</h1>
+        <p class="subheading" data-i18n="hero.subtitle">
+          بلّغ عن غرضك المفقود أو الذي وجدته، ودع الباقي على FIND.
+        </p>
+
+        <div class="hero-actions">
+          <a href="report-lost.html" class="btn btn-primary btn-hero">
+            <span data-i18n="hero.cta.lost">فقدت غرضاً</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="report-found.html" class="btn btn-ghost" data-i18n="hero.cta.found">وجدت غرضاً</a>
+        </div>
+
+        <div class="hero-signals">
+          <span class="signals-label" data-i18n="hero.signals.label">نطابق تلقائياً حسب</span>
+          <div class="signal-pills">
+            <span class="signal-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+              <span data-i18n="hero.signal.desc">الوصف</span>
+            </span>
+            <span class="signal-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="1.4" fill="currentColor" stroke="none"/><path d="M21 15.5l-5-4.5-8.5 7"/></svg>
+              <span data-i18n="hero.signal.image">الصورة</span>
+            </span>
+            <span class="signal-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-4 0-7 3.2-7 7 0 5.2 7 11 7 11s7-5.8 7-11c0-3.8-3-7-7-7z"/><circle cx="12" cy="10" r="2.3"/></svg>
+              <span data-i18n="hero.signal.location">الموقع</span>
+            </span>
+            <span class="signal-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 3.2"/></svg>
+              <span data-i18n="hero.signal.time">الوقت</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- لوحة المطابقة المتحركة (js/hero-match.js) ---------- -->
+      <div class="hero-visual-col">
+        <div class="match-visual" id="matchVisual" aria-hidden="true">
+          <div class="mv-stage" id="mvStage">
+
+            <div class="mv-halo"></div>
+            <div class="mv-ring mv-ring--outer"></div>
+            <div class="mv-ring mv-ring--mid"></div>
+            <div class="mv-ring mv-ring--inner"></div>
+            <div class="mv-sweep"></div>
+
+            <svg class="mv-links" viewBox="0 0 560 560" fill="none">
+              <!-- خطوط من المركز للمعايير الأربعة -->
+              <line class="mv-spoke" x1="280" y1="280" x2="315.6" y2="78"/>
+              <line class="mv-spoke" x1="280" y1="280" x2="472.6" y2="210"/>
+              <line class="mv-spoke" x1="280" y1="280" x2="210" y2="472.6"/>
+              <line class="mv-spoke" x1="280" y1="280" x2="78" y2="315.6"/>
+              <!-- الخطين اللي يربطون البلاغين بالمركز -->
+              <path id="mvPathLost"  class="mv-link" d="M 220 106 C 270 106, 280 170, 280 280"/>
+              <path id="mvPathFound" class="mv-link" d="M 340 454 C 290 454, 280 390, 280 280"/>
+              <circle class="mv-particle" r="4">
+                <animateMotion dur="2.2s" repeatCount="indefinite"><mpath xlink:href="#mvPathLost"/></animateMotion>
+              </circle>
+              <circle class="mv-particle" r="4">
+                <animateMotion dur="2.2s" begin="1.1s" repeatCount="indefinite"><mpath xlink:href="#mvPathFound"/></animateMotion>
+              </circle>
+            </svg>
+
+            <!-- المعايير الأربعة (بنفس ترتيب فحصها) -->
+            <div class="mv-node" style="--x:56.4%; --y:13.9%">
+              <span class="mv-gain">+35%</span>
+              <span class="mv-node-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+              <span class="mv-node-label" data-i18n="hero.signal.desc">الوصف</span>
+            </div>
+            <div class="mv-node" style="--x:84.4%; --y:37.5%">
+              <span class="mv-gain">+25%</span>
+              <span class="mv-node-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="1.4" fill="currentColor" stroke="none"/><path d="M21 15.5l-5-4.5-8.5 7"/></svg></span>
+              <span class="mv-node-label" data-i18n="hero.signal.image">الصورة</span>
+            </div>
+            <div class="mv-node" style="--x:37.5%; --y:84.4%">
+              <span class="mv-gain">+20%</span>
+              <span class="mv-node-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-4 0-7 3.2-7 7 0 5.2 7 11 7 11s7-5.8 7-11c0-3.8-3-7-7-7z"/><circle cx="12" cy="10" r="2.3"/></svg></span>
+              <span class="mv-node-label" data-i18n="hero.signal.location">الموقع</span>
+            </div>
+            <div class="mv-node" style="--x:13.9%; --y:56.4%">
+              <span class="mv-gain">+20%</span>
+              <span class="mv-node-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 3.2"/></svg></span>
+              <span class="mv-node-label" data-i18n="hero.signal.time">الوقت</span>
+            </div>
+
+            <!-- المركز: نسبة التطابق -->
+            <div class="mv-core">
+              <svg class="mv-score-ring" viewBox="0 0 160 160">
+                <defs>
+                  <linearGradient id="mvGold" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#F3E7D0"/>
+                    <stop offset="0.5" stop-color="#D9B77A"/>
+                    <stop offset="1" stop-color="#B8863B"/>
+                  </linearGradient>
+                </defs>
+                <circle class="mv-score-track" cx="80" cy="80" r="66"/>
+                <circle class="mv-score-bar" id="mvScoreBar" cx="80" cy="80" r="66" stroke="url(#mvGold)" stroke-dasharray="414.69" stroke-dashoffset="414.69"/>
+              </svg>
+              <div class="mv-core-inner">
+                <b id="mvScore">0%</b>
+                <span data-i18n="match.score.label">تطابق</span>
+              </div>
+            </div>
+
+            <!-- شرارات لحظة التطابق (تتولد من js/hero-match.js) -->
+            <div class="mv-sparks" id="mvSparks"></div>
+
+            <!-- بلاغ مفقود -->
+            <div class="mv-card mv-card--lost">
+              <div class="mv-card-thumb">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18"/><circle cx="16.5" cy="14.5" r="1" fill="currentColor" stroke="none"/></svg>
+              </div>
+              <div class="mv-card-body">
+                <span class="mv-tag mv-tag--lost" data-i18n="report.lost.tag">مفقود</span>
+                <div class="mv-card-title" id="mvLostTitle">آيفون 14 أسود</div>
+                <div class="mv-card-meta" id="mvLostMeta">فُقد في المكتبة المركزية · أمس</div>
+              </div>
+              <span class="mv-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+            </div>
+
+            <!-- بلاغ موجود -->
+            <div class="mv-card mv-card--found">
+              <div class="mv-card-thumb">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18"/><circle cx="16.5" cy="14.5" r="1" fill="currentColor" stroke="none"/></svg>
+              </div>
+              <div class="mv-card-body">
+                <span class="mv-tag mv-tag--found" data-i18n="report.found.tag">موجود</span>
+                <div class="mv-card-title" id="mvFoundTitle">جوال آيفون أسود</div>
+                <div class="mv-card-meta" id="mvFoundMeta">وُجد في المكتبة المركزية · اليوم</div>
+              </div>
+              <span class="mv-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mv-status" id="mvStatus" aria-hidden="true">
+          <span class="mv-status-dot"></span>
+          <span id="mvStatusText"></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <a href="#why" class="hero-scroll" aria-label="انزل للأسفل">
+    <span class="hero-scroll-mouse"></span>
+  </a>
+</section>
+
+<!-- ============ Why FIND (value props) ============ -->
+<section class="section" id="why">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-text" data-i18n="home.values.tag">لماذا FIND؟</span>
+      <h2 class="heading" data-i18n="home.values.title">ليس مجرد منصة بلاغات عادية</h2>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 data-i18n="home.values.speed.title">مطابقة لحظية</h3>
+        <p data-i18n="home.values.speed.body">اختصار للوقت المستغرق في طرق التواصل المعتادة عبر تطبيقات التواصل الاجتماعي غير الموثوقة في إرجاع الغرض لصاحبه الحقيقي.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+        </div>
+        <h3 data-i18n="home.values.privacy.title">خصوصية مبنية بالنظام</h3>
+        <p data-i18n="home.values.privacy.body">بياناتك وبلاغاتك محمية بالكامل. أي طلب تواصل يحتاج موافقتك أولاً، وبعدها تُفتح محادثة آمنة ومراقبة بالكامل يظهر فيها رقمك ورقم الطرف الآخر فقط — وتقدر تقفلها نهائياً بعد تأكيد الاستلام، مع الاحتفاظ بسجل التواصل لدى المسؤولين.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/></svg>
+        </div>
+        <h3 data-i18n="home.values.accuracy.title">دقة تطابق بأربع معايير</h3>
+        <p data-i18n="home.values.accuracy.body">الوصف والصورة والموقع والوقت مجتمعين، بمعنى أن التطابق مع بلاغ آخر ليس عشوائياً وإنما حقيقي.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Categories ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head split">
+      <div>
+        <span class="eyebrow-text" data-i18n="home.categories.tag">كل الفئات</span>
+        <h2 class="heading" data-i18n="home.categories.title">حدد فئة غرضك</h2>
+        <p class="subheading" data-i18n="home.categories.subtitle">من الجوالات إلى المفاتيح، بلّغ بالفئة المناسبة ودع المطابقة تكون أدق.</p>
+      </div>
+    </div>
+
+    <div class="category-grid">
+      <a href="report.html" class="category-tile">
+        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 19h20"/></svg></div>
+        <span data-i18n="cat.1">إلكترونيات</span>
+      </a>
+      <a href="report.html" class="category-tile">
+        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></div>
+        <span data-i18n="cat.2">جوالات</span>
+      </a>
+      <a href="report.html" class="category-tile">
+        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18"/><circle cx="16.5" cy="14.5" r="1" fill="currentColor" stroke="none"/></svg></div>
+        <span data-i18n="cat.3">محافظ وبطاقات</span>
+      </a>
+      <a href="report.html" class="category-tile">
+        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M16.5 16.5l2.5 2.5M19 14l3 3"/></svg></div>
+        <span data-i18n="cat.4">مفاتيح</span>
+      </a>
+      <a href="report.html" class="category-tile">
+        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="9" width="16" height="12" rx="2.5"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/><path d="M4 13.5h16"/></svg></div>
+        <span data-i18n="cat.5">حقائب</span>
+      </a>
+      <a href="report.html" class="category-tile">
+        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="6"/><path d="M12 3.5V6M12 18v2.5M9 12h6"/></svg></div>
+        <span data-i18n="cat.7">ساعات ومجوهرات</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ How it works: ascending 3D staircase ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head" style="max-width:60ch">
+      <span class="eyebrow-text" data-i18n="steps.eyebrow">كيف تعمل المنصة</span>
+      <h2 class="heading" data-i18n="steps.title">من البلاغ إلى استرجاع الغرض، بثلاث خطوات</h2>
+    </div>
+
+    <div class="steps3d">
+      <div class="step3d" style="--lift:38px">
+        <div class="step-num mono-tag">1</div>
+        <h3 class="heading" data-i18n="steps.1.title">سجّل دخولك وقدّم بلاغك</h3>
+        <p data-i18n="steps.1.body">سجّل الدخول ببياناتك كطالب أو موظف، ثم اختر مفقود أو موجود وأضف الوصف والصورة والموقع والتاريخ.</p>
+      </div>
+      <div class="step3d" style="--lift:16px">
+        <div class="step-num mono-tag">2</div>
+        <h3 class="heading" data-i18n="steps.2.title">المطابقة التلقائية</h3>
+        <p data-i18n="steps.2.body">تقارن المنصة بلاغك بجميع البلاغات الأخرى وتعرض لك الأقرب فقط، مع نسبة تطابق واضحة لكل بلاغ مقترح.</p>
+      </div>
+      <div class="step3d" style="--lift:-6px">
+        <div class="step-num mono-tag">3</div>
+        <h3 class="heading" data-i18n="steps.3.title">التأكيد والتواصل</h3>
+        <p data-i18n="steps.3.body">بعد موافقة الطرفين، تُفتح صفحة محادثة خاصة ومراقبة بالكامل داخل المنصة، ويظهر رقم التواصل لكل من الطرفين عند الحاجة، وصولاً لإتمام تسليم الغرض.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Trust: dark tilt cards ============ -->
+<section class="section trust">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="heading" data-i18n="trust.title">الخصوصية بشكل كامل</h2>
+      <p class="subheading" data-i18n="trust.body">بلاغك لا يظهر لأي شخص عشوائي بمتصفح المنصة، فقط يظهر لأصحاب البلاغات المشابهة فعلياً لغرضك.</p>
+    </div>
+
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><path d="M4 4l16 16"/></svg></div>
+        <b data-i18n="trust.stat1.num">0</b>
+        <p data-i18n="trust.stat1.txt">لا تظهر بلاغات لمستخدم جديد بدون أي بلاغ</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2-7 4 14 2-7h4"/></svg></div>
+        <b data-i18n="trust.stat2.num">٪100</b>
+        <p data-i18n="trust.stat2.txt">البلاغات تمر عبر شروط مطابقة صارمة قبل الظهور لأي مستخدم</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></div>
+        <b data-i18n="trust.stat3.num">4</b>
+        <p data-i18n="trust.stat3.txt">معايير مطابقة: الوصف، الصورة، الموقع، الوقت</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <b data-i18n="trust.stat4.num">١</b>
+        <p data-i18n="trust.stat4.txt">نقطة التواصل الوحيدة الآمنة والموثوقة والمراقبة بشكل كامل عن طريق FIND</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/particle-bg.js"></script>
+<script src="js/hero-match.js"></script>
+</body>
+</html>

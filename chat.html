@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المحادثات — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/chat.css">
+</head>
+<body data-page="chat">
+
+<div id="site-header-mount"></div>
+
+<section class="chat-page">
+  <div class="container">
+
+    <h1 class="heading" data-i18n="chat.title">المحادثات</h1>
+    <p class="chat-sub" id="chatSub"></p>
+
+    <div id="loginGuard" class="form-error" style="display:none"></div>
+
+    <div class="chat-shell" id="chatShell">
+
+      <!-- ---------- قائمة المحادثات ---------- -->
+      <aside class="chat-sidebar">
+        <div class="sidebar-head">
+          <div class="sidebar-title">
+            <span data-i18n="chat.conversations">محادثاتي</span>
+            <span class="sidebar-count" id="convCount" hidden></span>
+          </div>
+          <label class="chat-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input type="search" id="convSearch" autocomplete="off">
+          </label>
+        </div>
+
+        <div class="conv-list" id="convList"></div>
+
+        <div id="convEmpty" class="chat-empty-state" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span data-i18n="chat.noConversations">ما عندك أي محادثة بعد — تفتح تلقائياً بعد الموافقة على تطابق.</span>
+        </div>
+      </aside>
+
+      <!-- ---------- المحادثة المفتوحة ---------- -->
+      <div class="chat-thread" id="chatThread">
+
+        <div class="thread-empty" id="threadEmpty">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>
+          </div>
+          <span data-i18n="chat.selectPrompt">اختر محادثة من القائمة</span>
+        </div>
+
+        <div class="thread-active" id="threadActive" hidden>
+
+          <div class="thread-head">
+            <button type="button" class="thread-back" id="threadBack">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <div class="conv-avatar" id="threadAvatar">؟</div>
+            <div class="thread-info">
+              <div class="thread-name" id="threadName">—</div>
+              <div class="thread-meta">
+                <span class="role-tag" id="threadRole"></span>
+                <span class="thread-item" id="threadItem"></span>
+              </div>
+            </div>
+            <div class="thread-actions">
+              <div class="phone-chip" id="phoneChip" hidden>
+                <a class="phone-chip-call" id="callBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+                  <span class="phone-chip-num" id="callNumber"></span>
+                </a>
+                <button type="button" class="phone-chip-copy" id="copyPhoneBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+                </button>
+              </div>
+              <button type="button" class="resolve-btn" id="resolveBtn" data-i18n="chat.resolve">تم الاستلام ✅</button>
+            </div>
+          </div>
+
+          <div class="thread-body">
+            <div class="thread-messages" id="threadMessages"></div>
+            <button type="button" class="jump-btn" id="jumpBtn" hidden>
+              <span id="jumpLabel"></span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+            </button>
+          </div>
+
+          <div id="closedNote" class="thread-closed-note" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+            <span data-i18n="chat.closedNote">هذه المحادثة مغلقة — تم تأكيد استلام الغرض.</span>
+          </div>
+
+          <form class="thread-input" id="messageForm">
+            <div class="input-wrap">
+              <textarea id="messageInput" rows="1" maxlength="2000" data-i18n-placeholder="chat.placeholder" placeholder="اكتب رسالتك..."></textarea>
+              <span class="char-count" id="charCount" hidden></span>
+            </div>
+            <button type="submit" class="send-btn" id="sendBtn" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  /* ============================================================
+     نصوص الصفحة (الجديدة اللي مو موجودة بـ i18n.js)
+     ============================================================ */
+  const CHAT_TEXT = {
+    ar: {
+      subtitle: "محادثات خاصة ومراقبة مع أصحاب البلاغات المتطابقة — تنفتح تلقائياً بعد الموافقة على طلب التواصل.",
+      search: "ابحث بالاسم أو الغرض...",
+      today: "اليوم",
+      yesterday: "أمس",
+      you: "أنت: ",
+      noMessages: "ما فيه رسائل بعد — ابدأ المحادثة",
+      ownerRole: "أنت صاحب الغرض",
+      finderRole: "أنت من وجد الغرض",
+      closed: "مغلقة",
+      call: "اتصال",
+      copy: "نسخ الرقم",
+      copied: "تم نسخ رقم الجوال",
+      back: "رجوع",
+      send: "إرسال",
+      noResults: "ما فيه نتائج مطابقة",
+      startHint: "ابدأ المحادثة 👋 اتفقوا على مكان ووقت التسليم داخل الحرم الجامعي.",
+      newMessages: "رسائل جديدة",
+      confirmResolve: "تأكيد إن الغرض تم تسليمه واستلامه؟ بعدها تنقفل المحادثة نهائياً.",
+      resolveFailed: "تعذّر إتمام العملية، حاول مرة ثانية",
+      sendFailed: "تعذّر إرسال الرسالة، حاول مرة ثانية",
+      loadFailed: "تعذّر تحميل المحادثات",
+      loading: "جارِ التحميل...",
+      sent: "تم الإرسال",
+      read: "تمت القراءة",
+      loginRequired: 'يجب <a href="login.html" style="text-decoration:underline">تسجيل الدخول</a> لعرض المحادثات.',
+    },
+    en: {
+      subtitle: "Private, monitored chats with the owners of matching reports — opened automatically once a contact request is approved.",
+      search: "Search by name or item...",
+      today: "Today",
+      yesterday: "Yesterday",
+      you: "You: ",
+      noMessages: "No messages yet — say hello",
+      ownerRole: "You own the item",
+      finderRole: "You found the item",
+      closed: "Closed",
+      call: "Call",
+      copy: "Copy number",
+      copied: "Phone number copied",
+      back: "Back",
+      send: "Send",
+      noResults: "No matching conversations",
+      startHint: "Start the conversation 👋 Agree on a time and place on campus for the handover.",
+      newMessages: "New messages",
+      confirmResolve: "Confirm the item was handed over? The chat will be closed for good.",
+      resolveFailed: "Could not complete this action, please try again",
+      sendFailed: "Could not send the message, please try again",
+      loadFailed: "Could not load conversations",
+      loading: "Loading...",
+      sent: "Sent",
+      read: "Read",
+      loginRequired: 'You must <a href="login.html" style="text-decoration:underline">log in</a> to view chats.',
+    },
+  };
+
+  /* ============================================================
+     الحالة
+     ============================================================ */
+  let me = null;
+  let conversations = [];
+  let activeId = null;
+  let activeMessages = [];
+  let justAddedId = null;
+  let searchTerm = "";
+
+  const $ = (id) => document.getElementById(id);
+  function lang() { return localStorage.getItem("find_lang") || "ar"; }
+  function T() { return CHAT_TEXT[lang()] || CHAT_TEXT.ar; }
+  function locale() { return lang() === "ar" ? "ar-SA-u-ca-gregory" : "en-GB"; }
+  const isDesktop = () => window.matchMedia("(pointer: fine)").matches;
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+  }
+
+  function initials(name) { return (name || "؟").trim().charAt(0).toUpperCase(); }
+
+  /* ---------- التواريخ ---------- */
+  function dayKey(d) { const x = new Date(d); return `${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`; }
+  function isToday(d) { return dayKey(d) === dayKey(new Date()); }
+  function isYesterday(d) { const y = new Date(); y.setDate(y.getDate() - 1); return dayKey(d) === dayKey(y); }
+
+  function formatTime(d) {
+    return new Date(d).toLocaleTimeString(locale(), { hour: "2-digit", minute: "2-digit" });
+  }
+  function formatDay(d) {
+    if (isToday(d)) return T().today;
+    if (isYesterday(d)) return T().yesterday;
+    return new Date(d).toLocaleDateString(locale(), { day: "numeric", month: "long", year: "numeric" });
+  }
+  function formatListTime(d) {
+    if (!d) return "";
+    if (isToday(d)) return formatTime(d);
+    if (isYesterday(d)) return T().yesterday;
+    return new Date(d).toLocaleDateString(locale(), { day: "numeric", month: "short" });
+  }
+
+  /* ---------- مساعدات القائمة ---------- */
+  function lastActivity(c) { return new Date(c.last ? c.last.created_at : c.created_at).getTime(); }
+  function sortConversations() { conversations.sort((a, b) => lastActivity(b) - lastActivity(a)); }
+  function totalUnread() { return conversations.reduce((sum, c) => sum + c.unread, 0); }
+  function syncHeaderBadge() { if (typeof updateChatBadge === "function") updateChatBadge(totalUnread()); }
+  function activeConv() { return conversations.find(c => c.id === activeId) || null; }
+
+  function notify(title) {
+    if (typeof showFindToast === "function") showFindToast({ title, tone: "error", duration: 5000 });
+    else alert(title);
+  }
+
+  /* ============================================================
+     النصوص الثابتة (تتحدث مع تبديل اللغة)
+     ============================================================ */
+  function applyStaticTexts() {
+    const t = T();
+    $("chatSub").textContent = t.subtitle;
+    $("convSearch").placeholder = t.search;
+    $("jumpLabel").textContent = t.newMessages;
+    $("callBtn").setAttribute("aria-label", t.call);
+    $("copyPhoneBtn").setAttribute("aria-label", t.copy);
+    $("copyPhoneBtn").title = t.copy;
+    $("threadBack").setAttribute("aria-label", t.back);
+    $("sendBtn").setAttribute("aria-label", t.send);
+  }
+
+  /* ============================================================
+     تحميل المحادثات
+     ============================================================ */
+  async function loadConversations() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const guard = $("loginGuard");
+
+    if (!session) {
+      guard.style.display = "block";
+      guard.innerHTML = T().loginRequired;
+      $("chatShell").style.display = "none";
+      return;
+    }
+    me = session.user.id;
+
+    $("convList").innerHTML = `<div class="conv-loading">${escapeHtml(T().loading)}</div>`;
+
+    const { data, error } = await supabaseClient
+      .from("conversations")
+      .select(`
+        id, status, match_id, user_a_id, user_b_id, created_at,
+        matches (
+          lost:lost_report_id ( title, user_id ),
+          found:found_report_id ( title, user_id )
+        )
+      `)
+      .or(`user_a_id.eq.${me},user_b_id.eq.${me}`)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      $("convList").innerHTML = `<div class="conv-no-results">${escapeHtml(T().loadFailed)}</div>`;
+      return;
+    }
+
+    // بيانات الطرف الآخر (الاسم والجوال — متاحة لأن المحادثة ما تنفتح إلا بعد الموافقة)
+    const otherIds = [...new Set(data.map(c => (c.user_a_id === me ? c.user_b_id : c.user_a_id)))];
+    const profilesById = {};
+    if (otherIds.length > 0) {
+      const { data: profiles } = await supabaseClient.from("profiles").select("id, full_name, phone").in("id", otherIds);
+      (profiles || []).forEach(p => { profilesById[p.id] = p; });
+    }
+
+    conversations = data.map(c => {
+      const otherId = c.user_a_id === me ? c.user_b_id : c.user_a_id;
+      const lost = c.matches?.lost;
+      const found = c.matches?.found;
+      return {
+        id: c.id,
+        status: c.status,
+        match_id: c.match_id,
+        created_at: c.created_at,
+        otherId,
+        other: profilesById[otherId] || null,
+        itemTitle: lost?.title || found?.title || "",
+        role: lost?.user_id === me ? "owner" : "finder",
+        last: null,
+        unread: 0,
+      };
+    });
+
+    // آخر رسالة + عدد غير المقروء لكل محادثة
+    if (conversations.length > 0) {
+      const byId = Object.fromEntries(conversations.map(c => [c.id, c]));
+      const { data: msgs } = await supabaseClient
+        .from("messages")
+        .select("id, conversation_id, sender_id, body, is_read, created_at")
+        .in("conversation_id", conversations.map(c => c.id))
+        .order("created_at", { ascending: false })
+        .limit(1000);
+
+      (msgs || []).forEach(m => {
+        const c = byId[m.conversation_id];
+        if (!c) return;
+        if (!c.last) c.last = m;
+        if (m.sender_id !== me && !m.is_read) c.unread += 1;
+      });
+    }
+
+    sortConversations();
+    renderConversationList();
+    syncHeaderBadge();
+    subscribeRealtime();
+
+    const wantedMatch = new URLSearchParams(window.location.search).get("match");
+    const target = wantedMatch ? conversations.find(c => c.match_id === wantedMatch) : null;
+
+    if (target) openConversation(target.id);
+    else if (conversations.length > 0 && window.innerWidth > 860) openConversation(conversations[0].id);
+  }
+
+  /* ============================================================
+     عرض قائمة المحادثات
+     ============================================================ */
+  function renderConversationList() {
+    const listEl = $("convList");
+    const emptyEl = $("convEmpty");
+    const countEl = $("convCount");
+    const t = T();
+
+    countEl.textContent = conversations.length;
+    countEl.hidden = conversations.length === 0;
+
+    if (conversations.length === 0) {
+      listEl.innerHTML = "";
+      emptyEl.hidden = false;
+      return;
+    }
+    emptyEl.hidden = true;
+
+    const q = searchTerm.trim().toLowerCase();
+    const items = q
+      ? conversations.filter(c =>
+          (c.other?.full_name || "").toLowerCase().includes(q) ||
+          c.itemTitle.toLowerCase().includes(q))
+      : conversations;
+
+    if (items.length === 0) {
+      listEl.innerHTML = `<div class="conv-no-results">${escapeHtml(t.noResults)}</div>`;
+      return;
+    }
+
+    listEl.innerHTML = items.map(c => {
+      const preview = c.last
+        ? (c.last.sender_id === me ? t.you : "") + c.last.body
+        : t.noMessages;
+
+      let side = "";
+      if (c.status === "closed") side = `<span class="closed-chip">${escapeHtml(t.closed)}</span>`;
+      else if (c.unread > 0) side = `<span class="unread-badge">${c.unread > 99 ? "99+" : c.unread}</span>`;
+
+      return `
+        <button type="button" class="conv-item ${c.id === activeId ? "is-active" : ""} ${c.unread > 0 ? "is-unread" : ""}" data-conv="${c.id}">
+          <div class="conv-avatar">${escapeHtml(initials(c.other?.full_name))}</div>
+          <div class="conv-info">
+            <div class="conv-row">
+              <span class="conv-name">${escapeHtml(c.other?.full_name || "—")}</span>
+              <span class="conv-time">${escapeHtml(formatListTime(c.last?.created_at))}</span>
+            </div>
+            <div class="conv-context">${escapeHtml(c.itemTitle)}</div>
+            <div class="conv-row">
+              <span class="conv-preview">${escapeHtml(preview)}</span>
+              ${side}
+            </div>
+          </div>
+        </button>
+      `;
+    }).join("");
+
+    listEl.querySelectorAll("[data-conv]").forEach(btn => {
+      btn.addEventListener("click", () => openConversation(btn.getAttribute("data-conv")));
+    });
+  }
+
+  /* ============================================================
+     فتح محادثة
+     ============================================================ */
+  async function openConversation(convId) {
+    const conv = conversations.find(c => c.id === convId);
+    if (!conv) return;
+
+    activeId = convId;
+    activeMessages = [];
+    justAddedId = null;
+    renderConversationList();
+
+    $("chatShell").classList.add("show-thread");
+    $("threadEmpty").hidden = true;
+    $("threadActive").hidden = false;
+    $("jumpBtn").hidden = true;
+
+    renderThreadHeader(conv);
+    applyClosedState(conv);
+    $("threadMessages").innerHTML = `<div class="thread-hint">${escapeHtml(T().loading)}</div>`;
+
+    // نحدّث الرابط عشان لو سوّيت تحديث للصفحة ترجع لنفس المحادثة
+    const url = new URL(window.location.href);
+    url.searchParams.set("match", conv.match_id);
+    history.replaceState(null, "", url);
+
+    const { data, error } = await supabaseClient
+      .from("messages")
+      .select("*")
+      .eq("conversation_id", convId)
+      .order("created_at", { ascending: true });
+
+    if (activeId !== convId) return; // المستخدم فتح محادثة ثانية أثناء التحميل
+
+    if (error) {
+      console.error(error);
+      $("threadMessages").innerHTML = `<div class="thread-hint">${escapeHtml(T().loadFailed)}</div>`;
+      return;
+    }
+
+    activeMessages = data || [];
+    renderMessages();
+    scrollToBottom(false);
+    markConversationRead(conv);
+
+    if (isDesktop() && conv.status !== "closed") $("messageInput").focus();
+  }
+
+  function renderThreadHeader(conv) {
+    const t = T();
+    $("threadAvatar").textContent = initials(conv.other?.full_name);
+    $("threadName").textContent = conv.other?.full_name || "—";
+    $("threadRole").textContent = conv.role === "owner" ? t.ownerRole : t.finderRole;
+    $("threadItem").textContent = conv.itemTitle;
+
+    // رقم جوال الطرف الثاني ظاهر مباشرة (يتصل عليه بالضغط، أو ينسخه)
+    const chip = $("phoneChip");
+    const phone = conv.other?.phone || "";
+    if (phone && conv.status !== "closed") {
+      $("callBtn").href = `tel:${phone}`;
+      $("callBtn").title = `${t.call}: ${phone}`;
+      $("callNumber").textContent = phone;
+      chip.hidden = false;
+    } else {
+      chip.hidden = true;
+    }
+  }
+
+  async function copyPhone() {
+    const phone = activeConv()?.other?.phone;
+    if (!phone) return;
+    try {
+      await navigator.clipboard.writeText(phone);
+    } catch (_) {
+      const tmp = document.createElement("textarea");
+      tmp.value = phone;
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand("copy");
+      tmp.remove();
+    }
+    const btn = $("copyPhoneBtn");
+    btn.classList.add("is-copied");
+    setTimeout(() => btn.classList.remove("is-copied"), 1600);
+    if (typeof showFindToast === "function") showFindToast({ title: T().copied, duration: 2500 });
+  }
+
+  function applyClosedState(conv) {
+    const closed = conv.status === "closed";
+    $("resolveBtn").hidden = closed;
+    $("closedNote").hidden = !closed;
+    $("messageForm").hidden = closed;
+  }
+
+  /* ============================================================
+     عرض الرسائل
+     ============================================================ */
+  function ticksHtml(read) {
+    const t = T();
+    const paths = read
+      ? '<path d="M2 12.5l4.5 4.5L15 8"/><path d="M9.5 16l1 1L20 8"/>'
+      : '<path d="M5 12.5l4.5 4.5L19 8"/>';
+    return `<span class="msg-ticks${read ? " is-read" : ""}" title="${read ? t.read : t.sent}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg></span>`;
+  }
+
+  function createMessageRow(m, isCont) {
+    const mine = m.sender_id === me;
+    const row = document.createElement("div");
+    row.className = "msg-row " + (mine ? "mine" : "theirs") + (isCont ? " is-cont" : "") + (m.id === justAddedId ? " is-new" : "");
+    row.dataset.id = m.id;
+
+    const bubble = document.createElement("div");
+    bubble.className = "msg-bubble";
+
+    const text = document.createElement("div");
+    text.className = "msg-text";
+    text.textContent = m.body;
+
+    const meta = document.createElement("div");
+    meta.className = "msg-meta";
+    const time = document.createElement("span");
+    time.textContent = formatTime(m.created_at);
+    meta.appendChild(time);
+    if (mine) meta.insertAdjacentHTML("beforeend", ticksHtml(m.is_read));
+
+    bubble.append(text, meta);
+    row.appendChild(bubble);
+    return row;
+  }
+
+  function renderMessages() {
+    const wrap = $("threadMessages");
+    wrap.innerHTML = "";
+
+    if (activeMessages.length === 0) {
+      const hint = document.createElement("div");
+      hint.className = "thread-hint";
+      hint.textContent = T().startHint;
+      wrap.appendChild(hint);
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    let prev = null;
+
+    activeMessages.forEach(m => {
+      if (!prev || dayKey(prev.created_at) !== dayKey(m.created_at)) {
+        const sep = document.createElement("div");
+        sep.className = "day-sep";
+        sep.textContent = formatDay(m.created_at);
+        frag.appendChild(sep);
+        prev = null;
+      }
+      // رسائل متتالية من نفس الشخص خلال 5 دقائق تتجمّع بشكل أنظف
+      const isCont = !!prev && prev.sender_id === m.sender_id &&
+        (new Date(m.created_at) - new Date(prev.created_at)) < 5 * 60 * 1000;
+      frag.appendChild(createMessageRow(m, isCont));
+      prev = m;
+    });
+
+    wrap.appendChild(frag);
+  }
+
+  function isNearBottom() {
+    const wrap = $("threadMessages");
+    return wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 120;
+  }
+
+  function scrollToBottom(smooth) {
+    const wrap = $("threadMessages");
+    wrap.scrollTo({ top: wrap.scrollHeight, behavior: smooth ? "smooth" : "auto" });
+    $("jumpBtn").hidden = true;
+  }
+
+  function appendMessage(m) {
+    if (activeMessages.some(x => x.id === m.id)) return;
+
+    const wrap = $("threadMessages");
+    const stick = isNearBottom() || m.sender_id === me;
+    const prevTop = wrap.scrollTop;
+
+    activeMessages.push(m);
+    justAddedId = m.id;
+    renderMessages();
+
+    if (stick) {
+      scrollToBottom(true);
+    } else {
+      wrap.scrollTop = prevTop;
+      $("jumpBtn").hidden = false;
+    }
+  }
+
+  /* ============================================================
+     تعليم الرسائل كمقروءة
+     ============================================================ */
+  async function markConversationRead(conv) {
+    if (conv.unread > 0) {
+      conv.unread = 0;
+      renderConversationList();
+      syncHeaderBadge();
+    }
+    const { error } = await supabaseClient
+      .from("messages")
+      .update({ is_read: true })
+      .eq("conversation_id", conv.id)
+      .neq("sender_id", me)
+      .eq("is_read", false);
+    if (error) console.warn("mark read:", error.message);
+  }
+
+  /* ============================================================
+     Realtime: رسائل جديدة، علامات القراءة، وإغلاق المحادثة
+     ============================================================ */
+  function subscribeRealtime() {
+    supabaseClient
+      .channel(`chat-inbox-${me}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" },
+        (payload) => onMessageInsert(payload.new))
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "messages" },
+        (payload) => onMessageUpdate(payload.new))
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "conversations" },
+        (payload) => onConversationUpdate(payload.new))
+      .subscribe();
+  }
+
+  function onMessageInsert(m) {
+    const conv = conversations.find(c => c.id === m.conversation_id);
+    if (!conv) return;
+
+    if (!conv.last || new Date(m.created_at) >= new Date(conv.last.created_at)) conv.last = m;
+
+    if (conv.id === activeId) {
+      appendMessage(m);
+      if (m.sender_id !== me) markConversationRead(conv);
+    } else if (m.sender_id !== me) {
+      conv.unread += 1;
+      syncHeaderBadge();
+    }
+
+    sortConversations();
+    renderConversationList();
+  }
+
+  function onMessageUpdate(m) {
+    const conv = conversations.find(c => c.id === m.conversation_id);
+    if (conv && conv.last && conv.last.id === m.id) conv.last = m;
+    if (m.conversation_id !== activeId) return;
+
+    const local = activeMessages.find(x => x.id === m.id);
+    if (!local || local.is_read === m.is_read) return;
+    local.is_read = m.is_read;
+
+    const ticks = $("threadMessages").querySelector(`[data-id="${m.id}"] .msg-ticks`);
+    if (ticks) ticks.outerHTML = ticksHtml(m.is_read);
+  }
+
+  function onConversationUpdate(c) {
+    const conv = conversations.find(x => x.id === c.id);
+    if (!conv) return;
+    conv.status = c.status;
+    if (conv.id === activeId) {
+      applyClosedState(conv);
+      renderThreadHeader(conv);
+    }
+    renderConversationList();
+  }
+
+  /* ============================================================
+     كتابة وإرسال الرسائل
+     ============================================================ */
+  const input = $("messageInput");
+
+  function autosize() {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 140) + "px";
+  }
+
+  function updateComposerState() {
+    const len = input.value.length;
+    $("sendBtn").disabled = input.value.trim().length === 0;
+
+    const counter = $("charCount");
+    counter.hidden = len < 1700;
+    counter.textContent = `${len}/2000`;
+    counter.classList.toggle("is-limit", len >= 2000);
+  }
+
+  input.addEventListener("input", () => { autosize(); updateComposerState(); });
+
+  // Enter يرسل — Shift+Enter سطر جديد (بالجوال Enter ينزل سطر عادي)
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing && isDesktop()) {
+      e.preventDefault();
+      if (!$("sendBtn").disabled) $("messageForm").requestSubmit();
+    }
+  });
+
+  $("messageForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const body = input.value.trim();
+    const conv = activeConv();
+    if (!body || !conv || conv.status === "closed") return;
+
+    input.value = "";
+    autosize();
+    updateComposerState();
+    $("sendBtn").disabled = true;
+
+    const { data, error } = await supabaseClient
+      .from("messages")
+      .insert({ conversation_id: conv.id, sender_id: me, body })
+      .select()
+      .single();
+
+    if (error) {
+      console.error(error);
+      input.value = body;
+      autosize();
+      updateComposerState();
+      notify(T().sendFailed);
+      return;
+    }
+
+    if (!conv.last || new Date(data.created_at) >= new Date(conv.last.created_at)) conv.last = data;
+    if (activeId === conv.id) appendMessage(data);
+    sortConversations();
+    renderConversationList();
+    updateComposerState();
+  });
+
+  /* ============================================================
+     تأكيد الاستلام وإغلاق البلاغ
+     ============================================================ */
+  $("resolveBtn").addEventListener("click", async () => {
+    const conv = activeConv();
+    if (!conv) return;
+    if (!confirm(T().confirmResolve)) return;
+
+    const btn = $("resolveBtn");
+    btn.disabled = true;
+    const { data, error } = await supabaseClient.rpc("resolve_match", { p_match_id: conv.match_id });
+    btn.disabled = false;
+
+    if (error || !data?.ok) {
+      notify(T().resolveFailed);
+      return;
+    }
+
+    conv.status = "closed";
+    applyClosedState(conv);
+    renderThreadHeader(conv);
+    renderConversationList();
+  });
+
+  /* ============================================================
+     باقي التفاعلات
+     ============================================================ */
+  $("convSearch").addEventListener("input", (e) => {
+    searchTerm = e.target.value;
+    renderConversationList();
+  });
+
+  $("threadBack").addEventListener("click", () => {
+    $("chatShell").classList.remove("show-thread");
+  });
+
+  $("threadMessages").addEventListener("scroll", () => {
+    if (isNearBottom()) $("jumpBtn").hidden = true;
+  });
+
+  $("jumpBtn").addEventListener("click", () => scrollToBottom(true));
+
+  $("copyPhoneBtn").addEventListener("click", copyPhone);
+
+  // تبديل اللغة: نعيد رسم الأجزاء المتولدة بالجافاسكربت
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("[data-lang-switch]")) return;
+    setTimeout(() => {
+      applyStaticTexts();
+      renderConversationList();
+      const conv = activeConv();
+      if (conv) {
+        renderThreadHeader(conv);
+        const wrap = $("threadMessages");
+        const top = wrap.scrollTop;
+        justAddedId = null;
+        renderMessages();
+        wrap.scrollTop = top;
+      }
+    }, 0);
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    applyStaticTexts();
+    updateComposerState();
+    loadConversations();
+  });
+</script>
+</body>
+</html>

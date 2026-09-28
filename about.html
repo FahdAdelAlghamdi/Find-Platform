@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عن المنصة — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<div id="site-header-mount"></div>
+
+<!-- ============================================================
+     1) البداية: العنوان + مقارنة "قبل FIND / مع FIND" بالسحب
+     ============================================================ -->
+<section class="ab-hero">
+  <div class="container">
+    <div class="ab-hero-text" data-mesh-shield>
+      <span class="eyebrow-text" data-i18n="about.hero.eyebrow">عن المنصة</span>
+      <h1 class="display" data-t="hero.title">نختصر عليك البحث عن غرضك مع منصة FIND</h1>
+      <p class="subheading" data-t="hero.sub">
+        منصة FIND تحل مشكلة فقدان الأغراض والعثور عليها بطريقة أذكى، وتسهّل عليك التبليغ عنها.
+        فبدل أن تتصفح تطبيقات التواصل الاجتماعي وتسأل عن غرضك المفقود، أو تعلن أنك وجدت غرضاً،
+        ثم قد يصلك رد من شخص محتال بطريقة غير موثوقة، جاءت FIND لتختصر عليك رفع بلاغك،
+        وتبحث لك داخل المنصة عن البلاغات المشابهة له؛ إذ يبدأ النظام بمطابقة بلاغك تلقائياً
+        بأربعة معايير لحظة رفعه.
+      </p>
+    </div>
+
+    <div class="ab-compare" id="abCompare" data-reveal>
+      <!-- قبل FIND -->
+      <div class="ab-pane ab-pane--before">
+        <span class="ab-pane-tag ab-pane-tag--before" data-t="cmp.before">قبل FIND</span>
+        <div class="ab-pane-inner">
+          <div class="ab-chat">
+            <div class="ab-chat-head">
+              <span class="ab-chat-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.8"/><path d="M16.5 14.6c2.6.2 4.4 1.9 5 5.4"/></svg>
+              </span>
+              <div class="ab-chat-title">
+                <b data-t="cmp.group">قروب الدفعة — 512 عضو</b>
+                <small data-t="cmp.typing">14 شخص يكتبون الآن…</small>
+              </div>
+              <span class="ab-unread" id="abUnread">+248</span>
+            </div>
+            <div class="ab-chat-feed">
+              <div class="ab-chat-track" id="abChatTrack"></div>
+            </div>
+          </div>
+          <ul class="ab-points ab-points--bad">
+            <li data-t="cmp.bad1">رسالتك تضيع بين عدد كبير من الرسائل، وقد يصلك رد من شخص محتال وغير موثوق</li>
+            <li data-t="cmp.bad2">التواصل بطريقة غير آمنة</li>
+            <li data-t="cmp.bad3">تنتظر ولا تجد رداً أكيداً أو موثوقاً</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- مع FIND -->
+      <div class="ab-pane ab-pane--after">
+        <span class="ab-pane-tag ab-pane-tag--after" data-t="cmp.after">مع FIND</span>
+        <div class="ab-pane-inner">
+          <div class="ab-flow">
+            <div class="ab-flow-card">
+              <span class="ab-flow-icon ab-flow-icon--lost">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>
+              </span>
+              <div>
+                <small data-t="cmp.step1">بلاغك</small>
+                <b data-t="cmp.step1b">آيفون 14 أسود — المكتبة</b>
+              </div>
+            </div>
+            <span class="ab-flow-line"></span>
+            <div class="ab-flow-score">
+              <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34"/><circle class="ab-flow-score-bar" cx="40" cy="40" r="34"/></svg>
+              <b>100%</b>
+            </div>
+            <span class="ab-flow-line"></span>
+            <div class="ab-flow-card ab-flow-card--ok">
+              <span class="ab-flow-icon ab-flow-icon--ok">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              </span>
+              <div>
+                <small data-t="cmp.step3">محادثة آمنة داخل المنصة</small>
+                <b class="ab-mask">05•• ••• •••</b>
+              </div>
+            </div>
+          </div>
+          <ul class="ab-points ab-points--good">
+            <li data-t="cmp.good1">بلاغك يصل فقط لصاحب البلاغ المشابه له، بناءً على معايير محددة</li>
+            <li data-t="cmp.good2">رقمك مخفي لين توافق أنت</li>
+            <li data-t="cmp.good3">مطابقة تلقائية للبلاغ لحظة رفعه</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ab-handle" id="abHandle" role="slider" tabindex="0"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" data-t-aria="cmp.handle">
+        <span class="ab-handle-knob">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </div>
+    <p class="ab-compare-hint" data-t="cmp.hint">اسحب الفاصل وشوف الفرق بنفسك</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     2) ثلاث مشاكل وحلّها — بطاقات تنقلب
+     ============================================================ -->
+<section class="section ab-flip-sec">
+  <div class="container">
+    <div class="ab-head ab-head--dark" data-reveal>
+      <span class="eyebrow-text" data-i18n="about.why.tag">المشكلة</span>
+      <h2 class="heading" data-i18n="about.why.title">ليش بنينا FIND؟</h2>
+      <p data-t="flip.sub">ثلاث مشاكل كان يواجهها كل من يفقد غرضه أو يجد غرض غيره.</p>
+    </div>
+
+    <div class="ab-flip-grid">
+      <button type="button" class="ab-flip" data-reveal>
+        <span class="ab-flip-inner">
+          <span class="ab-flip-face ab-flip-front">
+            <span class="ab-flip-badge ab-flip-badge--bad" data-t="flip.problem">المشكلة</span>
+            <span class="ab-flip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 8h8M8 12h5"/></svg></span>
+            <span class="ab-flip-text" data-t="flip.1a">منشورك يضيع وسط مئات الرسائل في القروبات ومواقع التواصل، وما يوصل للشخص المعني</span>
+            <span class="ab-flip-more" data-t="flip.tap">اقلب البطاقة ←</span>
+          </span>
+          <span class="ab-flip-face ab-flip-back">
+            <span class="ab-flip-badge ab-flip-badge--good" data-t="flip.solution">الحل</span>
+            <span class="ab-flip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+            <span class="ab-flip-text" data-t="flip.1b">بلاغ منظّم برقم مرجعي خاص فيه، يوصل مباشرة لصاحب البلاغ المطابق فقط</span>
+          </span>
+        </span>
+      </button>
+
+      <button type="button" class="ab-flip" data-reveal>
+        <span class="ab-flip-inner">
+          <span class="ab-flip-face ab-flip-front">
+            <span class="ab-flip-badge ab-flip-badge--bad" data-t="flip.problem">المشكلة</span>
+            <span class="ab-flip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+            <span class="ab-flip-text" data-t="flip.2a">تضطر تنشر رقم جوالك للجميع، وتصير عرضة لأي شخص غريب أو محتال</span>
+            <span class="ab-flip-more" data-t="flip.tap">اقلب البطاقة ←</span>
+          </span>
+          <span class="ab-flip-face ab-flip-back">
+            <span class="ab-flip-badge ab-flip-badge--good" data-t="flip.solution">الحل</span>
+            <span class="ab-flip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <span class="ab-flip-text" data-t="flip.2b">رقمك يبقى مخفياً تماماً، وما يظهر للطرف الثاني إلا بعد موافقتك أنت</span>
+          </span>
+        </span>
+      </button>
+
+      <button type="button" class="ab-flip" data-reveal>
+        <span class="ab-flip-inner">
+          <span class="ab-flip-face ab-flip-front">
+            <span class="ab-flip-badge ab-flip-badge--bad" data-t="flip.problem">المشكلة</span>
+            <span class="ab-flip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+            <span class="ab-flip-text" data-t="flip.3a">تتصفح المنشورات بنفسك كل يوم، وتنتظر رداً قد لا يأتي أبداً</span>
+            <span class="ab-flip-more" data-t="flip.tap">اقلب البطاقة ←</span>
+          </span>
+          <span class="ab-flip-face ab-flip-back">
+            <span class="ab-flip-badge ab-flip-badge--good" data-t="flip.solution">الحل</span>
+            <span class="ab-flip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" stroke-linejoin="round"/></svg></span>
+            <span class="ab-flip-text" data-t="flip.3b">المنصة تقارن بلاغك تلقائياً مع كل البلاغات، وتنبّهك أول ما تجد بلاغاً مطابقاً</span>
+          </span>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     3) جرّب الخوارزمية بنفسك — نفس معادلة قاعدة البيانات
+     ============================================================ -->
+<section class="section ab-sim-sec" id="simulator">
+  <div class="container">
+    <div class="ab-panel ab-panel--dark" data-reveal>
+      <div class="ab-head">
+        <span class="eyebrow-text" data-t="sim.tag">جرّب بنفسك</span>
+        <h2 class="heading" data-i18n="about.algo.title">كيف تشتغل المطابقة التلقائية؟</h2>
+      </div>
+
+      <div class="ab-sim">
+        <!-- ---------- المدخلات ---------- -->
+        <div class="ab-sim-controls">
+
+          <div class="ab-ctrl">
+            <div class="ab-ctrl-head">
+              <span class="ab-ctrl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+              <label for="simDesc" data-t="sim.desc">تشابه الوصف والعنوان</label>
+              <output id="simDescOut" class="ab-ctrl-value">55%</output>
+            </div>
+            <input type="range" id="simDesc" min="0" max="100" value="55" class="ab-range">
+            <small class="ab-ctrl-hint" data-t="sim.descHint">النظام يقارن كلمات الوصف والعنوان في البلاغين، حتى لو كانت الصياغة مختلفة</small>
+          </div>
+
+          <div class="ab-ctrl">
+            <div class="ab-ctrl-head">
+              <span class="ab-ctrl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="1.4" fill="currentColor" stroke="none"/><path d="M21 15.5l-5-4.5-8.5 7"/></svg></span>
+              <span data-t="sim.img">تشابه الصورتين</span>
+              <label class="ab-switch">
+                <input type="checkbox" id="simHasImg" checked>
+                <span class="ab-switch-track"></span>
+                <span class="ab-switch-label" data-t="sim.hasImg">البلاغين فيهم صورة</span>
+              </label>
+            </div>
+            <div class="ab-ctrl-row" id="simImgRow">
+              <input type="range" id="simImg" min="0" max="100" value="80" class="ab-range" aria-labelledby="simImgOut">
+              <output id="simImgOut" class="ab-ctrl-value">80%</output>
+            </div>
+            <small class="ab-ctrl-hint" id="simImgHint"></small>
+          </div>
+
+          <div class="ab-ctrl">
+            <div class="ab-ctrl-head">
+              <span class="ab-ctrl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-4 0-7 3.2-7 7 0 5.2 7 11 7 11s7-5.8 7-11c0-3.8-3-7-7-7z"/><circle cx="12" cy="10" r="2.3"/></svg></span>
+              <span data-t="sim.loc">الموقع</span>
+              <output id="simLocOut" class="ab-ctrl-value">+20</output>
+            </div>
+            <div class="ab-pair">
+              <label class="ab-pick">
+                <span data-t="sim.lostAt">مكان الفقدان</span>
+                <select id="simLocLost" class="ab-input"></select>
+              </label>
+              <label class="ab-pick">
+                <span data-t="sim.foundAt">مكان العثور</span>
+                <select id="simLocFound" class="ab-input"></select>
+              </label>
+            </div>
+            <small class="ab-ctrl-hint" id="simLocHint"></small>
+          </div>
+
+          <div class="ab-ctrl">
+            <div class="ab-ctrl-head">
+              <span class="ab-ctrl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 3.2"/></svg></span>
+              <span data-t="sim.time">التاريخ والوقت</span>
+              <output id="simTimeOut" class="ab-ctrl-value">+14</output>
+            </div>
+            <div class="ab-pair">
+              <label class="ab-pick">
+                <span data-t="sim.lostDate">تاريخ الفقدان</span>
+                <input type="date" id="simDateLost" class="ab-input">
+              </label>
+              <label class="ab-pick">
+                <span data-t="sim.foundDate">تاريخ العثور</span>
+                <input type="date" id="simDateFound" class="ab-input">
+              </label>
+              <label class="ab-pick">
+                <span data-t="sim.lostTime">وقت الفقدان (اختياري)</span>
+                <input type="time" id="simTimeLost" class="ab-input">
+              </label>
+              <label class="ab-pick">
+                <span data-t="sim.foundTime">وقت العثور (اختياري)</span>
+                <input type="time" id="simTimeFound" class="ab-input">
+              </label>
+            </div>
+            <small class="ab-ctrl-hint" id="simTimeHint"></small>
+          </div>
+        </div>
+
+        <!-- ---------- النتيجة ---------- -->
+        <div class="ab-sim-result">
+          <div class="ab-gauge">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="abGold" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#F3E7D0"/>
+                  <stop offset="0.5" stop-color="#D9B77A"/>
+                  <stop offset="1" stop-color="#B8863B"/>
+                </linearGradient>
+              </defs>
+              <circle class="ab-gauge-track" cx="100" cy="100" r="84"/>
+              <circle class="ab-gauge-bar" id="simBar" cx="100" cy="100" r="84" stroke="url(#abGold)"/>
+            </svg>
+            <span class="ab-gauge-mark" aria-hidden="true"><i></i><em>55%</em></span>
+            <div class="ab-gauge-center">
+              <b id="simTotal">0%</b>
+              <span data-i18n="match.score.label">تطابق</span>
+            </div>
+          </div>
+
+          <div class="ab-verdict" id="simVerdict">
+            <span class="ab-verdict-icon"></span>
+            <span id="simVerdictText"></span>
+          </div>
+
+          <div class="ab-bars">
+            <div class="ab-bar-row">
+              <div class="ab-bar-head"><span data-t="sim.barText">الوصف</span><b id="simTextVal">0 / 35</b></div>
+              <div class="ab-bar"><i id="simTextBar"></i></div>
+            </div>
+            <div class="ab-bar-row" id="simImgBarRow">
+              <div class="ab-bar-head"><span data-t="sim.barImg">الصورة</span><b id="simImgVal">0 / 25</b></div>
+              <div class="ab-bar"><i id="simImgBar"></i></div>
+            </div>
+            <div class="ab-bar-row">
+              <div class="ab-bar-head"><span data-t="sim.barLoc">الموقع</span><b id="simLocVal">0 / 20</b></div>
+              <div class="ab-bar"><i id="simLocBar"></i></div>
+            </div>
+            <div class="ab-bar-row">
+              <div class="ab-bar-head"><span data-t="sim.barTime">الوقت</span><b id="simTimeVal">0 / 20</b></div>
+              <div class="ab-bar"><i id="simTimeBar"></i></div>
+            </div>
+          </div>
+
+          <p class="ab-sim-note" data-t="sim.note">شرط أساسي قبل كل هذا: البلاغين لازم يكونون من نفس الفئة، ومن نوعين مختلفين (مفقود وموجود)، والفرق بين تاريخيهم ما يتجاوز 60 يوم.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     4) الخصوصية — وش يشوف الطرف الثاني في كل مرحلة؟
+     ============================================================ -->
+<section class="section ab-priv-sec">
+  <div class="container">
+    <div class="ab-panel ab-panel--light" data-reveal>
+      <div class="ab-head ab-head--dark">
+        <span class="eyebrow-text" data-i18n="about.privacy.tag">الخصوصية</span>
+        <h2 class="heading" data-t="priv.title">ما الذي يستطيع أن يراه الطرف الآخر؟</h2>
+      </div>
+
+      <div class="ab-priv">
+        <ol class="ab-steps" id="privSteps">
+          <li><button type="button" data-step="0"><span class="ab-step-num">1</span><span data-t="priv.s0">رفعت بلاغك</span></button></li>
+          <li><button type="button" data-step="1"><span class="ab-step-num">2</span><span data-t="priv.s1">صار تطابق</span></button></li>
+          <li><button type="button" data-step="2"><span class="ab-step-num">3</span><span data-t="priv.s2">طلب تواصل</span></button></li>
+          <li><button type="button" data-step="3"><span class="ab-step-num">4</span><span data-t="priv.s3">تمت الموافقة</span></button></li>
+        </ol>
+
+        <div class="ab-priv-view">
+          <div class="ab-idcard" id="privCard">
+            <div class="ab-idcard-head">
+              <span class="ab-idcard-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.4 4.2-6.5 8-6.5s7 2.1 8 6.5"/></svg>
+              </span>
+              <div>
+                <small data-t="priv.cardTitle">بياناتك كما يشوفها الطرف الثاني</small>
+                <span class="ab-pending" id="privPending" data-t="priv.pending">طلب تواصل بانتظار موافقتك</span>
+              </div>
+            </div>
+
+            <div class="ab-field" data-field="report">
+              <span class="ab-field-label" data-t="priv.fReport">تفاصيل البلاغ</span>
+              <span class="ab-field-value">
+                <span class="ab-field-hidden"><i class="ab-lock"></i><span data-t="priv.hReport">مخفي عن الجميع</span></span>
+                <span class="ab-field-shown" data-t="priv.vReport">آيفون 14 أسود · المكتبة المركزية</span>
+              </span>
+            </div>
+            <div class="ab-field" data-field="name">
+              <span class="ab-field-label" data-t="priv.fName">الاسم</span>
+              <span class="ab-field-value">
+                <span class="ab-field-hidden"><i class="ab-lock"></i><span class="ab-blur">•••••• ••••••</span></span>
+                <span class="ab-field-shown" data-t="priv.vName">اسمك الكامل</span>
+              </span>
+            </div>
+            <div class="ab-field" data-field="phone">
+              <span class="ab-field-label" data-t="priv.fPhone">رقم الجوال</span>
+              <span class="ab-field-value">
+                <span class="ab-field-hidden"><i class="ab-lock"></i><span class="ab-blur ab-ltr">05•• ••• •••</span></span>
+                <span class="ab-field-shown ab-ltr">05X XXX XXXX</span>
+              </span>
+            </div>
+            <div class="ab-field" data-field="chat">
+              <span class="ab-field-label" data-t="priv.fChat">المحادثة</span>
+              <span class="ab-field-value">
+                <span class="ab-field-hidden"><i class="ab-lock"></i><span data-t="priv.hChat">مقفلة</span></span>
+                <span class="ab-field-shown" data-t="priv.vChat">مفتوحة داخل المنصة</span>
+              </span>
+            </div>
+          </div>
+
+          <p class="ab-priv-caption" id="privCaption"></p>
+        </div>
+      </div>
+
+      <div class="ab-priv-facts">
+        <div class="ab-fact">
+          <span class="ab-fact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg></span>
+          <div><b data-t="fact.1t">بلاغك ما يشوفه إلا المعني فيه</b><p data-t="fact.1b">ما يقدر أحد يطّلع على بلاغك إلا صاحب البلاغ المطابق له فعلاً، والمنصة تمنع أي محاولة للوصول له من غيره.</p></div>
+        </div>
+        <div class="ab-fact">
+          <span class="ab-fact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 16l-5.5-5-7 6"/></svg></span>
+          <div><b data-t="fact.2t">صورك محفوظة بخصوصية تامة</b><p data-t="fact.2b">صور البلاغات ما تُنشر للعامة أبداً، وما يشوفها إلا الشخص اللي له علاقة ببلاغك.</p></div>
+        </div>
+        <div class="ab-fact">
+          <span class="ab-fact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+          <div><b data-t="fact.3t">تواصل آمن داخل المنصة</b><p data-t="fact.3b">بعد موافقتك، تنفتح محادثة داخل المنصة، بدل ما تضطر تعطي رقمك لشخص غريب من البداية.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     5) الرحلة — خط زمني يتعبّى مع النزول
+     ============================================================ -->
+<section class="section ab-journey-sec">
+  <div class="container">
+    <div class="ab-head" data-reveal>
+      <span class="eyebrow-text" data-i18n="about.journey.tag">الرحلة</span>
+      <h2 class="heading" data-i18n="about.journey.title">من لحظة الفقدان إلى استرجاع الغرض</h2>
+    </div>
+
+    <div class="ab-journey" id="abJourney">
+      <div class="ab-journey-line"><i></i></div>
+      <div class="ab-jstep">
+        <span class="ab-jdot">1</span>
+        <div class="ab-jcard">
+          <b data-t="jr.1t">تسجّل الدخول برقمك الخاص بالجامعة</b>
+          <p data-t="jr.1b">سواء كنت طالباً أو موظفاً، تدخل برقمك الخاص بالجامعة وكلمة المرور فقط.</p>
+          <small class="ab-jnote" data-t="jr.1n">ملاحظة: المنصة مخصصة لمنسوبي الجامعة فقط، فتأكد من كتابة رقمك بشكل صحيح عند إنشاء الحساب.</small>
+        </div>
+      </div>
+      <div class="ab-jstep">
+        <span class="ab-jdot">2</span>
+        <div class="ab-jcard">
+          <b data-i18n="about.journey.2.title">تقدّم بلاغك</b>
+          <p data-i18n="about.journey.2.body">تختار مفقود أو موجود، وتضيف الوصف والصورة (اختياري) والموقع والتاريخ.</p>
+        </div>
+      </div>
+      <div class="ab-jstep">
+        <span class="ab-jdot">3</span>
+        <div class="ab-jcard">
+          <b data-i18n="about.journey.3.title">المطابقة تشتغل تلقائياً</b>
+          <p data-i18n="about.journey.3.body">بمجرد ما تنشر بلاغك، النظام يقارنه بكل البلاغات المعاكسة على الفور — بدون أي تدخل يدوي من أحد.</p>
+        </div>
+      </div>
+      <div class="ab-jstep">
+        <span class="ab-jdot">4</span>
+        <div class="ab-jcard">
+          <b data-i18n="about.journey.4.title">إشعار وموافقة الطرفين</b>
+          <p data-i18n="about.journey.4.body">لو فيه تطابق قوي، توصلك إشعار وتقدر تطلب التواصل؛ الطرف الآخر يوافق أو يرفض.</p>
+        </div>
+      </div>
+      <div class="ab-jstep">
+        <span class="ab-jdot">5</span>
+        <div class="ab-jcard">
+          <b data-i18n="about.journey.5.title">محادثة وتسليم</b>
+          <p data-i18n="about.journey.5.body">بعد الموافقة، تُفتح محادثة خاصة ويظهر رقم التواصل، وتقدر تأكد استلام الغرض من نفس الصفحة.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     6) الفريق
+     ============================================================ -->
+<section class="section ab-team-sec">
+  <div class="container">
+    <div class="ab-head" data-reveal>
+      <span class="eyebrow-text" data-t="team.tag">المطورون</span>
+      <h2 class="heading" data-t="team.title">الفريق الذي أنشأ FIND</h2>
+      <p data-t="team.body">مشروع FIND صمّمته مجموعة من الطلاب، وهو منصة ضمن جامعة الإمام عبدالرحمن بن فيصل.</p>
+    </div>
+
+    <div class="ab-team">
+      <div class="ab-member ab-member--lead" data-reveal>
+        <span class="ab-member-avatar" data-t="team.a1">ف</span>
+        <b data-t="team.n1">فهد عادل الغامدي</b>
+        <small data-t="team.lead">رئيس الفريق</small>
+      </div>
+      <div class="ab-member" data-reveal>
+        <span class="ab-member-avatar" data-t="team.a2">ع</span>
+        <b data-t="team.n2">عبدالله محمد الشهيل</b>
+        <small data-t="team.member">عضو الفريق</small>
+      </div>
+      <div class="ab-member" data-reveal>
+        <span class="ab-member-avatar" data-t="team.a3">أ</span>
+        <b data-t="team.n3">أحمد محمد الخلف</b>
+        <small data-t="team.member">عضو الفريق</small>
+      </div>
+      <div class="ab-member" data-reveal>
+        <span class="ab-member-avatar" data-t="team.a4">إ</span>
+        <b data-t="team.n4">إبراهيم مصطفى الرمّاح</b>
+        <small data-t="team.member">عضو الفريق</small>
+      </div>
+      <div class="ab-member" data-reveal>
+        <span class="ab-member-avatar" data-t="team.a5">ح</span>
+        <b data-t="team.n5">حسين سعيد</b>
+        <small data-t="team.member">عضو الفريق</small>
+      </div>
+      <div class="ab-member" data-reveal>
+        <span class="ab-member-avatar" data-t="team.a6">س</span>
+        <b data-t="team.n6">سراج منير الخضاب</b>
+        <small data-t="team.member">عضو الفريق</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     7) الأسئلة المتكررة
+     ============================================================ -->
+<section class="section ab-faq-sec">
+  <div class="container">
+    <div class="ab-head" data-reveal>
+      <span class="eyebrow-text" data-i18n="about.faq.tag">أسئلة متكررة</span>
+      <h2 class="heading" data-i18n="about.faq.title">الأسئلة المتوقعة</h2>
+    </div>
+
+    <div class="ab-faq">
+      <details class="ab-faq-item" data-reveal>
+        <summary><span data-i18n="about.faq.1.q">هل المنصة تابعة رسمياً للجامعة؟</span><span class="ab-faq-plus"></span></summary>
+        <p data-t="faq.1a">لا، هي مشروع طلابي أكاديمي ضمن جامعة الإمام عبدالرحمن بن فيصل.</p>
+      </details>
+      <details class="ab-faq-item" data-reveal>
+        <summary><span data-i18n="about.faq.2.q">هل استخدام المنصة مجاني؟</span><span class="ab-faq-plus"></span></summary>
+        <p data-i18n="about.faq.2.a">نعم، تقديم البلاغات والتواصل ومتابعة الحالة كلها مجانية بالكامل.</p>
+      </details>
+      <details class="ab-faq-item" data-reveal>
+        <summary><span data-t="faq.3q">لماذا يجب تسجيل الدخول برقمي الخاص بالجامعة، سواء كنت طالباً أو موظفاً؟</span><span class="ab-faq-plus"></span></summary>
+        <p data-i18n="about.faq.3.a">لأجل التأكد من أن كل مستخدمي المنصة من منسوبي الجامعة فقط، وهذا يحمي البلاغات من إساءة الاستخدام من جهات خارجية.</p>
+      </details>
+      <details class="ab-faq-item" data-reveal>
+        <summary><span data-i18n="about.faq.4.q">ما الذي يضمن دقة المطابقة؟</span><span class="ab-faq-plus"></span></summary>
+        <p data-i18n="about.faq.4.a">تعطيك الخوارزمية نسبة تطابق تقديرية مبنية على الوصف والصورة والموقع والوقت، لكن القرار النهائي بالتواصل وتأكيد الاستلام يعود إليك دائماً.</p>
+      </details>
+      <details class="ab-faq-item" data-reveal>
+        <summary><span data-i18n="about.faq.5.q">أريد حذف بلاغ، ما هي الطريقة؟</span><span class="ab-faq-plus"></span></summary>
+        <p data-i18n="about.faq.5.a">من صفحة "بلاغاتي" يمكنك حذف أي بلاغ ما زال قيد الانتظار (أي لم يحصل على تطابق تمت الموافقة عليه بعد).</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     8) الدعوة للبدء
+     ============================================================ -->
+<section class="section ab-cta-sec">
+  <div class="container">
+    <div class="ab-cta" data-reveal>
+      <div class="ab-cta-glow"></div>
+      <div>
+        <h3 class="heading" data-i18n="about.cta.title">جاهز تبدأ؟</h3>
+        <p data-i18n="about.cta.body">سواء فقدت غرضك أو لقيت غرض غيرك، بلاغك الأول يبدأ المطابقة فوراً.</p>
+      </div>
+      <div class="ab-cta-actions">
+        <a href="report-lost.html" class="btn btn-gold" data-i18n="hero.cta.lost">فقدت غرضاً</a>
+        <a href="report-found.html" class="btn ab-btn-outline" data-i18n="hero.cta.found">وجدت غرضاً</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead"><em data-i18n="footer.teamLead">رئيس الفريق /</em>فهد عادل الغامدي</span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/particle-bg.js"></script>
+<script src="js/about.js"></script>
+</body>
+</html>

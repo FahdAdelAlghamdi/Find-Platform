@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<section class="auth-page">
+  <div class="container">
+    <div class="auth-card">
+      <h1 class="heading" data-i18n="auth.login.title">تسجيل الدخول</h1>
+      <p class="subheading" data-i18n="auth.login.subtitle">ادخل برقمك الجامعي وكلمة المرور</p>
+
+      <div id="formError" class="form-error" role="alert"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="universityId" data-i18n="field.universityId">الرقم الجامعي</label>
+          <input class="input" type="text" id="universityId" inputmode="numeric" required autofocus>
+        </div>
+
+        <div class="field">
+          <label for="password" data-i18n="field.password">كلمة المرور</label>
+          <input class="input" type="password" id="password" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn" data-i18n="auth.login.submit">
+          تسجيل الدخول
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        <span data-i18n="auth.noAccount">ليس لديك حساب؟</span>
+        <a href="signup.html" data-i18n="auth.goSignup">أنشئ حساباً</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  const form = document.getElementById("loginForm");
+  const errorBox = document.getElementById("formError");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.classList.remove("visible");
+
+    const universityId = document.getElementById("universityId").value.trim();
+    const password = document.getElementById("password").value;
+
+    submitBtn.setAttribute("disabled", "true");
+    const { data, error } = await loginUser({ universityId, password });
+    submitBtn.removeAttribute("disabled");
+
+    if (error) {
+      const lang = localStorage.getItem("find_lang") || "ar";
+      errorBox.textContent = DICTIONARY[lang]["error.invalidLogin"];
+      errorBox.classList.add("visible");
+      return;
+    }
+
+    window.location.href = "index.html";
+  });
+</script>
+</body>
+</html>

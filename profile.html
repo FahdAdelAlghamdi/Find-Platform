@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملفي الشخصي — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<section class="section">
+  <div class="container">
+    <h1 class="heading" style="margin-bottom:var(--sp-5)" data-i18n="profile.title">ملفي الشخصي</h1>
+
+    <div class="profile-card" id="profileCard">
+      <div class="profile-row">
+        <span class="label" data-i18n="profile.fullName">الاسم الكامل</span>
+        <span class="value" id="pFullName">—</span>
+      </div>
+      <div class="profile-row">
+        <span class="label" data-i18n="profile.universityId">الرقم الجامعي</span>
+        <span class="value mono-tag" id="pUniversityId">—</span>
+      </div>
+      <div class="profile-row">
+        <span class="label" data-i18n="profile.userType">نوع المستخدم</span>
+        <span class="value" id="pUserType">—</span>
+      </div>
+      <div class="profile-row">
+        <span class="label" data-i18n="profile.phone">رقم الجوال</span>
+        <span class="value mono-tag" id="pPhone">—</span>
+      </div>
+    </div>
+
+    <button class="btn btn-ghost" style="margin-top:var(--sp-5)" id="logoutBtn2" data-i18n="profile.logout">
+      تسجيل الخروج
+    </button>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const profile = await getCurrentProfile();
+
+    if (!profile) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    const lang = localStorage.getItem("find_lang") || "ar";
+    document.getElementById("pFullName").textContent = profile.full_name;
+    document.getElementById("pUniversityId").textContent = profile.university_id;
+    const typeLabels = {
+      student: DICTIONARY[lang]["field.userType.student"],
+      faculty: DICTIONARY[lang]["field.userType.faculty"],
+      staff:   DICTIONARY[lang]["field.userType.staff"],
+    };
+    document.getElementById("pUserType").textContent = typeLabels[profile.user_type] || profile.user_type;
+    document.getElementById("pPhone").textContent = profile.phone;
+  });
+
+  document.getElementById("logoutBtn2").addEventListener("click", async () => {
+    await logoutUser();
+    window.location.href = "index.html";
+  });
+</script>
+</body>
+</html>

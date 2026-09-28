@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإشعارات — FIND</title>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/notifications.css">
+</head>
+<body data-page="notifications">
+
+<div id="site-header-mount"></div>
+
+<section class="notif-page">
+  <div class="container">
+
+    <div class="notif-head">
+      <h1 class="heading" data-i18n="notif.title">الإشعارات</h1>
+    </div>
+
+    <div id="loadingState" class="subheading" data-i18n="myReports.loading">جارِ التحميل...</div>
+
+    <div id="notifList" class="notif-list" hidden></div>
+
+    <div id="emptyState" class="notif-empty" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M12 3a5 5 0 0 0-5 5v3.5c0 .8-.3 1.5-.8 2.1L5 15.5h14l-1.2-2A3.3 3.3 0 0 1 17 11.5V8a5 5 0 0 0-5-5z"/>
+        <path d="M9.5 18.5a2.5 2.5 0 0 0 5 0"/>
+      </svg>
+      <p data-i18n="notif.empty">ما عندك أي إشعارات لحد الآن.</p>
+    </div>
+
+    <div id="loginGuard" class="form-error" style="display:none"></div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <div class="footer-logos">
+        <img src="assets/uni-logo.png" alt="جامعة الإمام عبدالرحمن بن فيصل" class="footer-uni-logo">
+        <span class="footer-divider" aria-hidden="true"></span>
+        <div class="footer-find-mark">
+          <span class="find-mark-badge">F</span>
+          <span>FIND</span>
+        </div>
+      </div>
+      <p class="footer-tagline" data-i18n="hero.eyebrow">منصة بلاغات للمفقودات والموجودات بالجامعة</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.quicklinks">روابط الموقع</h4>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="report.html" data-i18n="nav.filing">تقديم بلاغ</a>
+      <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      <a href="matches.html" data-i18n="nav.notifications">بلاغات</a>
+      <a href="login.html" data-i18n="nav.login">تسجيل الدخول</a>
+      <a href="signup.html" data-i18n="nav.signup">إنشاء حساب</a>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">اتصل بنا</h4>
+      <span class="footer-contact-line">FindSupport@gmail.com</span>
+      <span class="footer-contact-line">0501234567</span>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer.devteam">مطوّرو المشروع</h4>
+      <span class="footer-lead">فهد عادل الغامدي <em data-i18n="footer.teamLead">— رئيس الفريق</em></span>
+      <span>عبدالله محمد الشهيل</span>
+      <span>أحمد محمد الخلف</span>
+      <span>إبراهيم مصطفى الرمّاح</span>
+      <span>حسين سعيد</span>
+      <span>سراج منير الخضاب</span>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span data-i18n="footer.rights">جامعة الإمام عبدالرحمن بن فيصل</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/header-auth.js"></script>
+<script src="js/i18n.js"></script>
+
+<script>
+  let currentUserId = null;
+
+  function lang() { return localStorage.getItem("find_lang") || "ar"; }
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+  }
+
+  function timeAgo(dateStr) {
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diffMs / 60000);
+    const L = lang();
+    if (mins < 1)   return L === "ar" ? "الآن" : "just now";
+    if (mins < 60)  return L === "ar" ? `قبل ${mins} دقيقة` : `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24)   return L === "ar" ? `قبل ${hrs} ساعة` : `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return L === "ar" ? `قبل ${days} يوم` : `${days}d ago`;
+  }
+
+  const TYPE_ICON = {
+    new_claim:      { cls: "type-claim",    svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' },
+    claim_approved: { cls: "type-approved", svg: '<path d="M5 13l4 4L19 7"/>' },
+    claim_rejected: { cls: "type-rejected", svg: '<path d="M6 6l12 12M18 6L6 18"/>' },
+  };
+
+  function itemIcon() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M2 19h20"/></svg>`;
+  }
+
+  function renderMiniReport(other, L) {
+    if (!other) return "";
+    return `
+      <div class="notif-card-mini">
+        <div class="notif-thumb">
+          ${other.image_url ? `<img src="${escapeHtml(other.image_url)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">` : itemIcon()}
+        </div>
+        <div>
+          <div class="notif-mini-title">${escapeHtml(other.title)}</div>
+          <div class="notif-mini-meta">
+            ${escapeHtml(L === "ar" ? other.locations?.name_ar : other.locations?.name_en)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMatchActions(match) {
+    if (!match) return "";
+    if (match.claim_status === "suggested") {
+      return `<button class="btn btn-gold" data-claim="${match.id}" data-i18n="matches.contact">تواصل</button>`;
+    }
+    if (match.claim_status === "claimed" && match.claimed_by === currentUserId) {
+      return `<span class="tag tag-gold" data-i18n="matches.waiting">بانتظار رد الطرف الآخر</span>`;
+    }
+    if (match.claim_status === "claimed" && match.claimed_by !== currentUserId) {
+      return `
+        <button class="btn btn-primary" data-approve="${match.id}" data-i18n="matches.approve">موافقة</button>
+        <button class="btn btn-ghost" data-reject="${match.id}" data-i18n="matches.reject">رفض</button>
+      `;
+    }
+    if (match.claim_status === "approved") {
+      return `
+        <span class="tag tag-found" data-i18n="matches.approved">تمت الموافقة</span>
+        <a href="chat.html?match=${match.id}" class="btn btn-primary" data-i18n="matches.openChat">فتح المحادثة</a>
+      `;
+    }
+    if (match.claim_status === "rejected") {
+      return `<span class="tag tag-muted" data-i18n="matches.rejectedTag">تم الرفض</span>`;
+    }
+    return "";
+  }
+
+  function renderList(items) {
+    const listEl = document.getElementById("notifList");
+    const emptyEl = document.getElementById("emptyState");
+
+    if (items.length === 0) {
+      listEl.hidden = true;
+      emptyEl.hidden = false;
+      return;
+    }
+
+    emptyEl.hidden = true;
+    listEl.hidden = false;
+    const L = lang();
+
+    listEl.innerHTML = items.map(n => {
+      const icon = TYPE_ICON[n.type] || TYPE_ICON.new_claim;
+      const text = notifText(n, L);
+      const match = n._match;
+      const other = match ? match._other : null;
+
+      const contactBox = (match && match.claim_status === "approved" && n._otherProfile)
+        ? `<div class="contact-box">
+             <span data-i18n="matches.contactLabel">التواصل مع</span>
+             <strong>${escapeHtml(n._otherProfile.full_name)}</strong>:
+             <span class="phone">${escapeHtml(n._otherProfile.phone)}</span>
+           </div>`
+        : "";
+
+      return `
+        <div class="notif-item ${n.is_read ? "" : "is-unread"}" data-notif="${n.id}">
+          <div class="notif-icon ${icon.cls}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon.svg}</svg>
+          </div>
+          <div class="notif-body">
+            <div class="notif-title">${escapeHtml(text.title)}</div>
+            ${text.body ? `<div class="notif-text">${escapeHtml(text.body)}</div>` : ""}
+            <div class="notif-time">${timeAgo(n.created_at)}</div>
+
+            ${renderMiniReport(other, L)}
+
+            ${match ? `<div class="notif-actions">${renderMatchActions(match)}</div>` : ""}
+            ${contactBox}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    applyLanguage(L);
+    attachHandlers();
+  }
+
+  function attachHandlers() {
+    document.querySelectorAll("[data-claim]").forEach(btn =>
+      btn.addEventListener("click", () => handleClaim(btn.getAttribute("data-claim"))));
+    document.querySelectorAll("[data-approve]").forEach(btn =>
+      btn.addEventListener("click", () => handleRespond(btn.getAttribute("data-approve"), true)));
+    document.querySelectorAll("[data-reject]").forEach(btn =>
+      btn.addEventListener("click", () => handleRespond(btn.getAttribute("data-reject"), false)));
+  }
+
+  async function handleClaim(matchId) {
+    const { data, error } = await supabaseClient.rpc("claim_match", { p_match_id: matchId });
+    if (error || !data?.ok) {
+      showFindToast({ title: lang() === "ar" ? "تعذّر إرسال الطلب" : "Could not send request", tone: "error", duration: 5000 });
+      return;
+    }
+    loadNotifications();
+  }
+
+  async function handleRespond(matchId, approve) {
+    const { data, error } = await supabaseClient.rpc("respond_to_claim", { p_match_id: matchId, p_approve: approve });
+    if (error || !data?.ok) {
+      showFindToast({ title: lang() === "ar" ? "حدث خطأ، حاول مرة ثانية" : "Something went wrong", tone: "error", duration: 5000 });
+      return;
+    }
+    loadNotifications();
+  }
+
+  /* فتح الصفحة = اطّلعت على الإشعارات: نعلّمها كمقروءة بقاعدة البيانات
+     وتختفي النقطة الحمراء — مع إبقاء تمييزها بصرياً بهذي الزيارة */
+  async function markAllRead() {
+    const { error } = await supabaseClient
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("user_id", currentUserId)
+      .eq("is_read", false);
+    if (error) console.warn("mark read:", error.message);
+    updateNotifBadge(0);
+  }
+
+  async function loadNotifications() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const guard = document.getElementById("loginGuard");
+    const loading = document.getElementById("loadingState");
+
+    if (!session) {
+      loading.hidden = true;
+      guard.style.display = "block";
+      guard.innerHTML = (lang() === "ar")
+        ? 'يجب <a href="login.html" style="text-decoration:underline">تسجيل الدخول</a> لعرض الإشعارات.'
+        : 'You must <a href="login.html" style="text-decoration:underline">log in</a> to view notifications.';
+      return;
+    }
+    currentUserId = session.user.id;
+
+    const { data: notifs, error } = await supabaseClient
+      .from("notifications")
+      .select("*")
+      .eq("user_id", currentUserId)
+      .in("type", VISIBLE_NOTIF_TYPES)
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    loading.hidden = true;
+
+    if (error) {
+      console.error(error);
+      guard.style.display = "block";
+      guard.textContent = lang() === "ar" ? "تعذّر تحميل الإشعارات" : "Could not load notifications";
+      return;
+    }
+
+    // بيانات التطابقات المرتبطة بالإشعارات
+    const matchIds = [...new Set(notifs.filter(n => n.match_id).map(n => n.match_id))];
+    const matchesById = {};
+
+    if (matchIds.length > 0) {
+      const { data: matches } = await supabaseClient
+        .from("matches")
+        .select(`
+          id, total_score, claim_status, claimed_by,
+          lost:lost_report_id ( id, title, description, image_url, event_date, type, user_id, locations(name_ar, name_en) ),
+          found:found_report_id ( id, title, description, image_url, event_date, type, user_id, locations(name_ar, name_en) )
+        `)
+        .in("id", matchIds);
+
+      (matches || []).forEach(m => {
+        if (m.lost && m.lost.user_id === currentUserId) m._other = m.found;
+        else if (m.found && m.found.user_id === currentUserId) m._other = m.lost;
+        matchesById[m.id] = m;
+      });
+    }
+
+    // بيانات الطرف الآخر (تنكشف فقط للتطابقات المعتمدة فعلياً عبر RLS)
+    const otherIds = [...new Set(Object.values(matchesById).map(m => m._other?.user_id).filter(Boolean))];
+    const profilesById = {};
+    if (otherIds.length > 0) {
+      const { data: profiles } = await supabaseClient.from("profiles").select("id, full_name, phone").in("id", otherIds);
+      (profiles || []).forEach(p => { profilesById[p.id] = p; });
+    }
+
+    notifs.forEach(n => {
+      if (n.match_id && matchesById[n.match_id]) {
+        n._match = matchesById[n.match_id];
+        n._otherProfile = profilesById[n._match._other?.user_id];
+      }
+    });
+
+    renderList(notifs);
+    markAllRead();
+  }
+
+  // لو وصل طلب جديد وأنت فاتح الصفحة، تتحدث القائمة مباشرة
+  window.onFindNotification = () => loadNotifications();
+
+  document.addEventListener("DOMContentLoaded", loadNotifications);
+</script>
+</body>
+</html>
